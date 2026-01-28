@@ -143,7 +143,6 @@ Section LinearNonLinearAssembly.
     - exact lin_to_dep_assembly_laws.
   Defined.
 
-
   Definition is_cartesian_lin_to_dep_assembly
     : is_cartesian_disp_functor lin_to_dep_assembly.
   Proof.

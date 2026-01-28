@@ -16,6 +16,7 @@
  Contents
  1. Fiberwise initial object
  2. Fiberwise binary products
+ 3. Fiberwise equalizers
  4. Fiberwise binary coproducts
  5. Fiberwise monoidal closed
  6. Preservation of fiberwise structure by substitution
