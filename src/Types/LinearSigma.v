@@ -7,6 +7,11 @@
  `∃ (x : X), A x ∧ B x` are not equivalent. The implication goes in only one direction,
  and thus the dependent sum functor only gives rise to an oplax monoidal functor.
 
+ Content
+ 1. Linear ∑-types
+ 2. Frobenius reciprocity
+ 3. Verification of the Beck-Chevalley condition
+
  *)
 Require Import UniMath.MoreFoundations.All.
 Require Import UniMath.CategoryTheory.Core.Prelude.
@@ -51,6 +56,7 @@ Section LinearSigma.
     Context {Γ₁ Γ₂ : assembly AC}
             (s : assembly_morphism Γ₁ Γ₂).
 
+    (** * 1. Linear ∑-types *)
     Definition linear_sigma_assembly
                (X : dep_assembly Γ₁)
                (y : Γ₂)
@@ -366,7 +372,8 @@ Section LinearSigma.
         }
         apply setproperty.
     Qed.
-      
+
+    (** * 2. Frobenius reciprocity *)
     Definition lin_assembly_frobenius_morphism
                (X : dep_assembly Γ₁)
                (X' : dep_assembly Γ₂)
@@ -497,7 +504,7 @@ Section LinearSigma.
     Defined.
   End SigmaType.
 
-  (** * 2. Verification of the Beck-Chevalley condition *)
+  (** * 3. Verification of the Beck-Chevalley condition *)
   Section BeckChevalley.
     Context {Γ₁ Γ₂ Γ₃ : assembly AC}
             {f₁ : assembly_morphism Γ₂ Γ₁}

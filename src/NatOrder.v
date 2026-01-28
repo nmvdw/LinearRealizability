@@ -1,3 +1,7 @@
+(**
+
+ This file contains various lemmas about the natural numbers.
+ *)
 Require Import UniMath.MoreFoundations.All.
 
 Proposition natgthorleh_left

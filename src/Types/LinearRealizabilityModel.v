@@ -1,3 +1,11 @@
+(**
+
+ The linear realizability model
+
+ In this file, we construct the linear realizability model. The relevant statements
+ are proved in other files, so here we only collect them and put them together.
+ 
+ *)
 Require Import UniMath.MoreFoundations.All.
 Require Import UniMath.CategoryTheory.Core.Prelude.
 Require Import UniMath.CategoryTheory.Adjunctions.Core.

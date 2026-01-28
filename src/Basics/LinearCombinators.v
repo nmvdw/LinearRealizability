@@ -6,6 +6,24 @@
 
  Contents
  1. Composition (for linear assemblies)
+ 2. Linear pairing
+ 3. The let combinator
+ 4. Swapping pairs
+ 5. Whiskering
+ 6. Unitors and associators
+ 7. A deletion combinator
+ 8. A binary F-combinator
+ 9. Combinators for the linear non-linear adjunction
+ 10. A K-combinator that deletes the modality
+ 11. Combinators for binary products
+ 12. Combinators for binary coproducts
+ 13. Combinators for functions
+ 14. Ternary pairing combinator
+ 15. Another K combinator
+ 16. Lambda abstraction
+ 17. Linear sigma
+ 18. Combinators for the Beck-Chevalley condition
+ 19. Combinators to verify Frobenius reciprocity
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -78,7 +96,7 @@ Proof.
   apply idpath.
 Qed.    
 
-
+(** * 2. Linear pairing *)
 Definition lin_pair_combinator
            (A : linear_combinatory_algebra)
   : A.
@@ -100,7 +118,7 @@ Proof.
   calc_beta.
 Qed.    
 
-
+(** * 3. The let combinator *)
 Definition lca_let_combinator_help
            (A : linear_combinatory_algebra)
   : A.
@@ -144,6 +162,7 @@ Proof.
   apply idpath.
 Qed.
 
+(** * 4. Swapping pairs *)
 Definition lca_swap_help
            {A : linear_combinatory_algebra}
   : A.
@@ -185,6 +204,7 @@ Proof.
   apply idpath.
 Qed.
 
+(** * 5. Whiskering *)
 Definition lca_lwhisker_help
            {A : linear_combinatory_algebra}
   : A.
@@ -275,7 +295,7 @@ Proof.
   apply idpath.
 Qed.
   
-
+(** * 6. Unitors and associators *)
 Definition lca_lunitor
            {A : linear_combinatory_algebra}
   : A.
@@ -320,7 +340,6 @@ Proof.
   rewrite linear_combinatory_algebra_i_eq.
   apply idpath.
 Qed.
-
 
 Definition lca_assoc_left_help_2
            {A : linear_combinatory_algebra}
@@ -461,7 +480,7 @@ Proof.
   apply idpath.
 Qed.
 
-
+(** * 7. A deletion combinator *)
 Definition lca_del_2
            {A : linear_combinatory_algebra}
   : A.
@@ -485,7 +504,7 @@ Proof.
   apply idpath.
 Qed.
 
-
+(** * 8. A binary F-combinator *)
 Definition lca_F_2
            {A : linear_combinatory_algebra}
   : A.
@@ -509,7 +528,7 @@ Proof.
   apply idpath.
 Qed.
 
-
+(** * 9. Combinators for the linear non-linear adjunction *)
 Section LinearNonLinear.
   Context {A : linear_combinatory_algebra}.
 
@@ -578,6 +597,7 @@ Section LinearNonLinear.
   Qed.
 End LinearNonLinear.
 
+(** * 10. A K-combinator that deletes the modality *)
 Definition lca_D_Ks
            {A : linear_combinatory_algebra}
   : A.
@@ -620,6 +640,7 @@ Proof.
   apply idpath.
 Qed.
 
+(** * 11. Combinators for binary products *)
 Definition lca_binprod_pr1_help
            {A : linear_combinatory_algebra}
   : A.
@@ -717,6 +738,7 @@ Proof.
   apply idpath.
 Qed.
 
+(** * 12. Combinators for binary coproducts *)
 Definition lca_bincoprod_left
            {A : linear_combinatory_algebra}
   : A.
@@ -835,6 +857,7 @@ Proof.
   calc_beta.
 Qed.
 
+(** * 13. Combinators for functions *)
 Definition lca_eval
            {A : linear_combinatory_algebra}
   : A.
@@ -895,6 +918,7 @@ Proof.
   calc_beta.
 Qed.
 
+(** * 14. Ternary pairing combinator *)
 Section LinPairPair.
   Context {A : linear_combinatory_algebra}.
 
@@ -953,6 +977,7 @@ Section LinPairPair.
   Qed.
 End LinPairPair.
 
+(** * 15. Another K combinator *)
 Definition lca_k_I
            {A : linear_combinatory_algebra}
   : A.
@@ -970,6 +995,7 @@ Proof.
   calc_beta.
 Qed.
 
+(** * 16. Lambda abstraction *)
 Definition lca_lin_lam
            {A : linear_combinatory_algebra}
   : A.
@@ -989,6 +1015,7 @@ Proof.
   calc_beta.
 Qed.
 
+(** * 17. Linear sigma *)
 Definition lca_lin_sig_elim
             {A : linear_combinatory_algebra}
   : A.
@@ -1010,6 +1037,7 @@ Proof.
   apply idpath.
 Qed.
 
+(** * 18. Combinators for the Beck-Chevalley condition *)
 Section BeckChevalley.
   Context {A : linear_combinatory_algebra}.
 
@@ -1078,6 +1106,7 @@ Section BeckChevalley.
   Qed.
 End BeckChevalley.
 
+(** * 19. Combinators to verify Frobenius reciprocity *)
 Definition lca_frobenius_pair
            {A : linear_combinatory_algebra}
   : A.

@@ -3,6 +3,7 @@
  BI-algebras
 
  BI-algebras are applicative structures with only the B combinator and I combinator.
+ We define this notion and provide the relevant accessors.
 
  *)
 Require Import UniMath.MoreFoundations.All.

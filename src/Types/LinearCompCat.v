@@ -1,3 +1,13 @@
+(**
+
+ Linear comprehension categories
+
+ Content
+ 1. Basic structure
+ 2. Basic type formers
+ 3. Linear comprehension categories
+
+ *)
 Require Import UniMath.MoreFoundations.All.
 Require Import UniMath.CategoryTheory.Core.Prelude.
 Require Import UniMath.CategoryTheory.Adjunctions.Core.

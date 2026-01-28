@@ -1,3 +1,17 @@
+(**
+
+ Functors that preserve the symmetric monoidal structure
+
+ In this file, we define the notion of structure preserving functors between
+ symmetric monoidal closed categories. This notion extends strong monoidal
+ functors by saying that the monoidal exponential is preserved as well. We
+ specify that by saying that some canonical map is an isomorphism.
+
+ Content
+ 1. Preservation of symmetric monoidal structure
+ 2. Useful functions
+
+ *)
 Require Import UniMath.MoreFoundations.All.
 Require Import UniMath.CategoryTheory.Core.Prelude.
 Require Import UniMath.CategoryTheory.Adjunctions.Core.
@@ -12,6 +26,7 @@ Import MonoidalNotations.
 Local Open Scope cat.
 Local Open Scope moncat.
 
+(** * 1. Preservation of symmetric monoidal structure *)
 Definition preserves_sym_mon_closed_map
            {V₁ V₂ : sym_mon_closed_cat}
            (F : symmetric_strong_monoidal_functor V₁ V₂)
@@ -30,7 +45,7 @@ Definition preserves_sym_mon_closed
   : UU
   := ∏ (x y : V₁), is_z_isomorphism (preserves_sym_mon_closed_map F x y).
 
-
+(** * 2. Useful functions *)
 Definition left_adjoint_on_unit
            {V₁ V₂ : monoidal_cat}
            (L : V₁ ⟶ V₂)
