@@ -1,0 +1,41 @@
+COQC = coqc
+COQDEP = coqdep
+-R . "Realizability"
+
+PreservesMonoidalClosed.v
+BeckChevalleyChosen.v
+SetFamilies.v
+NatOrder.v
+FiberwiseMonoidal.v
+
+Types/LinearCompCat.v
+
+Basics/CombinatoryAlgebra.v
+Basics/BIAlgebra.v
+Basics/Completeness.v
+Basics/Combinators.v
+Basics/LinearCombinatoryAlgebra.v
+Basics/LinearCompleteness.v
+Basics/LinearCombinators.v
+
+Assemblies/CatOfAssemblies.v
+Assemblies/AssembliesStructure.v
+Assemblies/ModestSet.v
+Assemblies/PartialEqRel.v
+Assemblies/ModestSetEquiv.v
+Assemblies/DependentAssembly.v
+Assemblies/LinearAssembly.v
+Assemblies/LinearAssemblyMonoidal.v
+
+Types/RealizabilityTripos.v
+Types/DependentSums.v
+Types/DependentProducts.v
+Types/FiberAssembly.v
+Types/LinearSigma.v
+Types/LinearPi.v
+Types/LinearFiber.v
+Types/LinearNonLinear.v
+Types/Terms.v
+Types/ImpredicativeUniverse.v
+
+Types/LinearRealizabilityModel.v
