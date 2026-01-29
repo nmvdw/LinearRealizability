@@ -7,6 +7,8 @@
  2. Modest families
  3. Modest families are in the universe
  4. Dependent products of modest families
+ 5. Modest families in the linear case
+ 6. All modest sets are in the universe
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -232,6 +234,7 @@ Section Linear.
 
   Let AC : combinatory_algebra := lca_to_ca A.
 
+  (** * 5. Modest families in the linear case *)
   Definition is_modest_family_linear_dep_prod
              {Γ₁ Γ₂ : assembly AC}
              (s : assembly_morphism Γ₁ Γ₂)
@@ -304,6 +307,26 @@ Section Linear.
     repeat intro.
     apply isapropunit.
   Qed.
+
+  Definition is_modest_family_equalizer_dep_assembly
+             {Γ : assembly AC}
+             {X₁ X₂ : dep_assembly Γ}
+             (f g : lin_dep_assembly_morphism X₁ X₂ (id_assembly_morphism _))
+             (HX : is_modest_dep_assembly X₁)
+    : is_modest_dep_assembly (equalizer_linear_assembly _ f g).
+  Proof.
+    intros x a y₁ y₂ p₁ p₂.
+    use subtypePath.
+    {
+      intro.
+      apply setproperty.
+    }
+    use (HX x a).
+    - exact p₁.
+    - exact p₂.
+  Qed.
+
+  (** * 6. All modest sets are in the universe *)
   Section UniverseIso.
     Context {Γ : assembly AC}
             (X : dep_assembly Γ)
