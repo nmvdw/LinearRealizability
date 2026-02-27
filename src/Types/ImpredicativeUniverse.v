@@ -307,7 +307,7 @@ Section Linear.
     repeat intro.
     apply isapropunit.
   Qed.
-
+  
   Definition is_modest_family_equalizer_dep_assembly
              {Γ : assembly AC}
              {X₁ X₂ : dep_assembly Γ}
@@ -324,6 +324,27 @@ Section Linear.
     use (HX x a).
     - exact p₁.
     - exact p₂.
+  Qed.
+
+  Definition is_modest_dep_assembly_excl_lin_assembly
+             {Γ : assembly AC}
+             (X : dep_assembly Γ)
+             (HX : is_modest_dep_assembly X)
+    : is_modest_dep_assembly (excl_lin_assembly X).
+  Proof.
+    intros x a y₁ y₂.
+    use factor_through_squash_hProp.
+    intros (b₁ & p₁ & q₁).
+    use factor_through_squash_hProp.
+    intros (b₂ & p₂ & q₂).
+    use (HX x).
+    - exact (D · a).
+    - rewrite p₁.
+      rewrite linear_combinatory_algebra_d_eq.
+      exact q₁.
+    - rewrite p₂.
+      rewrite linear_combinatory_algebra_d_eq.
+      exact q₂.
   Qed.
 
   (** * 6. All modest sets are in the universe *)
