@@ -8,6 +8,15 @@ SetFamilies.v
 NatOrder.v
 FiberwiseMonoidal.v
 
+InternalCategories/InternalCat.v
+InternalCategories/InternalFunctor.v
+InternalCategories/InternalNatTrans.v
+InternalCategories/CatOfInternalCat.v
+InternalCategories/TwoCatOfInternalCat.v
+InternalCategories/TerminalInternalCat.v
+InternalCategories/ProdInternalCat.v
+InternalCategories/BicatOfInternalCat.v
+
 Types/LinearCompCat.v
 
 Basics/CombinatoryAlgebra.v
