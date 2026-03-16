@@ -17,6 +17,21 @@ InternalCategories/TerminalInternalCat.v
 InternalCategories/ProdInternalCat.v
 InternalCategories/BicatOfInternalCat.v
 
+PseudoMonoid/Basics.v
+PseudoMonoid/FinalTransformation.v
+PseudoMonoid/Pr1Transformation.v
+PseudoMonoid/Pr2Transformation.v
+PseudoMonoid/ProdTransformation/Data.v
+PseudoMonoid/ProdTransformation/Naturality.v
+PseudoMonoid/ProdTransformation/Identity.v
+PseudoMonoid/ProdTransformation/Composition.v
+PseudoMonoid/ProdTransformation.v
+PseudoMonoid/ProdPseudoFunctor.v
+
+PseudoMonoid/PseudoMonoidOps.v
+PseudoMonoid/PseudoMonoidData.v
+PseudoMonoid/PseudoMonoid.v
+
 Types/LinearCompCat.v
 
 Basics/CombinatoryAlgebra.v
