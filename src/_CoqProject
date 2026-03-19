@@ -8,6 +8,8 @@ SetFamilies.v
 NatOrder.v
 FiberwiseMonoidal.v
 
+PseudoFunctorPreservation.v
+
 InternalCategories/InternalCat.v
 InternalCategories/InternalFunctor.v
 InternalCategories/InternalNatTrans.v
@@ -27,6 +29,13 @@ PseudoMonoid/ProdTransformation/Identity.v
 PseudoMonoid/ProdTransformation/Composition.v
 PseudoMonoid/ProdTransformation.v
 PseudoMonoid/ProdPseudoFunctor.v
+
+SplitFibration/SplitDispSetCat.v
+SplitFibration/TerminalSplitFib.v
+SplitFibration/BinProductSplitFib.v
+SplitFibration/TwoCatSplitDispSetCat.v
+SplitFibration/BicatSplitDispSetCat.v
+SplitFibration/Externalisation.v
 
 PseudoMonoid/PseudoMonoidOps.v
 PseudoMonoid/PseudoMonoidData.v

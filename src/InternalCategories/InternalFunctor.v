@@ -4,6 +4,8 @@ Require Import UniMath.CategoryTheory.Limits.Pullbacks.
 Require Import UniMath.CategoryTheory.DisplayedCats.Core.
 Require Import UniMath.CategoryTheory.DisplayedCats.Functors.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fibrations.
+Require Import UniMath.CategoryTheory.DisplayedCats.PreservesCleaving.
+Require Import UniMath.CategoryTheory.DisplayedCats.Isos.
 
 Require Import InternalCategories.InternalCat.
 
@@ -300,6 +302,25 @@ Proof.
   induction p ; cbn.
   rewrite !eq_to_internal_morphism_id.
   rewrite internal_functor_id.
+  apply idpath.
+Qed.
+
+Proposition internal_functor_eq_to_internal_morphism_over
+            {C : category}
+            {PB : Pullbacks C}
+            {d₁ d₂ : internal_cat PB}
+            (f : internal_functor d₁ d₂)
+            {Γ : C}
+            {x₁ x₂ : Γ --> internal_cat_ob d₁}
+            (p : x₁ = x₂)
+  : internal_functor_on_mor_over f (eq_to_internal_morphism p)
+    =
+    eq_to_internal_morphism (maponpaths (λ z, z · _) p).
+Proof.
+  induction p ; cbn.
+  rewrite !eq_to_internal_morphism_id.
+  rewrite <- internal_functor_id.
+  use internal_morphism_eq ; cbn.
   apply idpath.
 Qed.
 
@@ -640,4 +661,30 @@ Section InternalFunctorCartesian.
          rewrite internal_functor_id' ;
          apply idpath).
   Defined.
+
+  Definition preserves_cleaving_internal_functor_to_disp_functor
+    : preserves_cleaving
+        (internal_cat_to_cleaving d₁)
+        (internal_cat_to_cleaving d₂)
+        (internal_functor_to_disp_functor f).
+  Proof.
+    use make_preserves_cleaving.
+    - intros Γ₁ Γ₂ s x ; cbn ; unfold internal_cat_lift.
+      apply assoc'.
+    - intros Γ₁ Γ₂ s x ; cbn -[idtoiso_disp].
+      refine (!_).
+      etrans.
+      {
+        apply maponpaths_2.
+        apply idtoiso_disp_eq_to_internal_morphism.
+      }
+      use internal_morphism_over_eq.
+      rewrite eq_to_internal_morphism_left_over.
+      refine (!_).
+      refine (transportf_internal_morphism_mor_eq _ _ _ _ @ _).
+      refine (maponpaths pr1 (internal_functor_id f (s · x)) @ _).
+      cbn.
+      rewrite !assoc'.
+      apply idpath.
+  Qed.
 End InternalFunctorCartesian.

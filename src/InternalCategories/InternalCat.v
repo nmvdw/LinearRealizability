@@ -3,6 +3,7 @@ Require Import UniMath.CategoryTheory.Core.Prelude.
 Require Import UniMath.CategoryTheory.Limits.Pullbacks.
 Require Import UniMath.CategoryTheory.DisplayedCats.Core.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fibrations.
+Require Import UniMath.CategoryTheory.DisplayedCats.Isos.
 
 Local Open Scope cat.
 
@@ -547,6 +548,41 @@ Proof.
   - apply idpath.
 Defined.
 
+Definition is_internal_preorder
+           {C : category}
+           {PB : Pullbacks C}
+           (d : internal_cat PB)
+  : UU
+  := ∏ (Γ : C)
+       (x y : Γ --> internal_cat_ob d)
+       (f g : internal_morphism x y),
+     f = g.
+
+Definition internal_preorder
+           {C : category}
+           (PB : Pullbacks C)
+  : UU
+  := ∑ (d : internal_cat PB), is_internal_preorder d.
+
+Coercion internal_preorder_to_internal_cat
+         {C : category}
+         {PB : Pullbacks C}
+         (d : internal_preorder PB)
+  : internal_cat PB
+  := pr1 d.
+
+Proposition internal_preorder_morphism_eq
+            {C : category}
+            {PB : Pullbacks C}
+            {d : internal_preorder PB}
+            {Γ : C}
+            {x y : Γ --> internal_cat_ob d}
+            (f g : internal_morphism x y)
+  : f = g.
+Proof.
+  apply (pr2 d).
+Qed.
+            
 (** * 5. The externalisation *)
 Definition internal_cat_disp_cat
            {C : category}
@@ -558,6 +594,33 @@ Proof.
   - exact (internal_cat_disp_cat_data d).
   - exact (pr2 d).
 Defined.
+
+Proposition locally_propositionalinternal_preorder_disp_cat
+            {C : category}
+            {PB : Pullbacks C}
+            (d : internal_preorder PB)
+  : locally_propositional (internal_cat_disp_cat d).
+Proof.
+  intros Γ₁ Γ₂ s x y.
+  use invproofirrelevance.
+  intros f g.
+  pose (f' := internal_morphism_over_to_internal_morphism f).
+  pose (g' := internal_morphism_over_to_internal_morphism g).
+  pose (internal_preorder_morphism_eq f' g').
+  use internal_morphism_over_eq.
+  exact (maponpaths pr1 p).
+Qed.
+
+Proposition locally_propositional_to_is_internal_preorder
+            {C : category}
+            {PB : Pullbacks C}
+            (d : internal_cat PB)
+            (H : locally_propositional (internal_cat_disp_cat d))
+  : is_internal_preorder d.
+Proof.
+  intros Γ x y f g.
+  apply (H Γ Γ (identity _) x y f g).
+Qed.
 
 Proposition transportf_internal_morphism_dom_eq
             {C : category}
@@ -1042,6 +1105,62 @@ Proof.
     apply idpath.
 Qed.
 
+Proposition eq_to_internal_morphism_left_over
+            {C : category}
+            {PB : Pullbacks C}
+            {d : internal_cat PB}
+            {Γ₁ Γ₂ : C}
+            {x y : Γ₁ --> internal_cat_ob d}
+            {z : Γ₂ --> internal_cat_ob d}
+            {s : Γ₁ --> Γ₂}
+            (p : x = y)
+            (f : internal_morphism_over y z s)
+  : internal_morphism_over_to_mor
+      (internal_cat_comp_mor_over
+         (eq_to_internal_morphism p)
+         f)
+    =
+    f.
+Proof.
+  pose (f' := internal_morphism_over_to_internal_morphism f).
+  refine (_ @ maponpaths pr1 (internal_morphism_id_left f')).
+  induction p ; cbn.
+  apply maponpaths_2.
+  use (PullbackArrowUnique _ (isPullback_Pullback (PB _ _ _ _ _))).
+  - rewrite PullbackArrow_PullbackPr1.
+    apply idpath.
+  - rewrite PullbackArrow_PullbackPr2.
+    apply id_left.
+Qed.
+
+Proposition eq_to_internal_morphism_right_over
+            {C : category}
+            {PB : Pullbacks C}
+            {d : internal_cat PB}
+            {Γ₁ Γ₂ : C}
+            {x : Γ₁ --> internal_cat_ob d}
+            {y z : Γ₂ --> internal_cat_ob d}
+            {s : Γ₁ --> Γ₂}
+            (p : y = z)
+            (f : internal_morphism_over x y s)
+  : internal_morphism_over_to_mor
+      (internal_cat_comp_mor_over
+         f
+         (eq_to_internal_morphism p))
+    =
+    f.
+Proof.
+  pose (f' := internal_morphism_over_to_internal_morphism f).
+  refine (_ @ maponpaths pr1 (internal_morphism_id_right f')).
+  induction p ; cbn.
+  apply maponpaths_2.
+  use (PullbackArrowUnique _ (isPullback_Pullback (PB _ _ _ _ _))).
+  - rewrite PullbackArrow_PullbackPr1.
+    apply idpath.
+  - rewrite PullbackArrow_PullbackPr2.
+    apply assoc.
+Qed.
+
 Proposition eq_to_internal_morphism_right
             {C : category}
             {PB : Pullbacks C}
@@ -1061,4 +1180,20 @@ Proof.
     apply idpath.
   - rewrite PullbackArrow_PullbackPr2.
     apply idpath.
+Qed.
+
+Proposition idtoiso_disp_eq_to_internal_morphism
+            {C : category}
+            {PB : Pullbacks C}
+            {d : internal_cat PB}
+            {Γ : C}
+            {x y : Γ --> internal_cat_ob d}
+            (p : x = y)
+  : pr1 (idtoiso_disp (D := internal_cat_disp_cat d) (idpath _) p)
+    =
+    eq_to_internal_morphism p.
+Proof.
+  use internal_morphism_eq.
+  induction p ; cbn.
+  apply idpath.
 Qed.

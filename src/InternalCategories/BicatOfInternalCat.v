@@ -130,3 +130,10 @@ Proof.
            [ intro ; apply isapropdirprod ; apply cellset_property | ] ;
            exact (binprod_internal_cat_nat_trans_unique _ _ _ _ _ p₁ p₂)).
 Defined.
+
+Definition bicat_with_binprod_of_internal_cat
+           {C : category}
+           (BP : BinProducts C)
+           (PB : Pullbacks C)
+  : bicat_with_binprod
+  := _ ,, binprod_bicat_of_internal_cat BP PB.

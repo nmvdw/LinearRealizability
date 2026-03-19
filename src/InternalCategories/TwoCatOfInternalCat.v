@@ -62,6 +62,25 @@ Proof.
   apply assoc.
 Qed.
 
+Proposition internal_cat_idto2mor_disp
+            {C : category}
+            {PB : Pullbacks C}
+            {d₁ d₂ : internal_cat PB}
+            {f₁ f₂ : internal_functor d₁ d₂}
+            (p : f₁ = f₂)
+            {Γ : C}
+            (x : Γ --> internal_cat_ob d₁)
+  : internal_nat_trans_data_to_disp_nat_trans
+      (pr1 (idto2mor (C := two_cat_data_of_internal_cat PB) p))
+      Γ x
+    =
+    eq_to_internal_morphism (internal_cat_idto2mor_eq p x).
+Proof.
+  induction p.
+  use internal_morphism_eq ; cbn.
+  apply assoc.
+Qed.
+
 Definition two_cat_category_of_internal_cat
            {C : category}
            (PB : Pullbacks C)

@@ -33,6 +33,12 @@ Coercion bifinal_obj_to_obj
   : B
   := pr1 T.
 
+Coercion bifinal_obj_to_is_bifinal
+         {B : bicat}
+         (T : bifinal_obj B)
+  : is_bifinal T
+  := pr2 T.
+
 Definition prod_pair_cell
            {B : bicat_with_binprod}
            {x y₁ y₂ z₁ z₂ : B}
