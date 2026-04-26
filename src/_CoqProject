@@ -2,6 +2,7 @@ COQC = coqc
 COQDEP = coqdep
 -R . "Realizability"
 
+AdjUniquenessCell.v
 PreservesMonoidalClosed.v
 BeckChevalleyChosen.v
 SetFamilies.v
@@ -38,8 +39,8 @@ SplitFibration/BicatSplitDispSetCat.v
 SplitFibration/Externalisation.v
 
 PseudoMonoid/PseudoMonoidOps.v
-PseudoMonoid/PseudoMonoidData.v
-PseudoMonoid/PseudoMonoid.v
+PseudoMonoid/LiftPseudoMonoid/LiftOps.v
+PseudoMonoid/PseudoMonoidOpsLaws.v
 
 Types/LinearCompCat.v
 
