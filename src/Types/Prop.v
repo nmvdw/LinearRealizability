@@ -10,6 +10,7 @@
  - the unit type
  - binary products of types
  - dependent products (and thus function types as well)
+ - identity types
  We also show that it contains the following linear type formers:
  - the empty linear type (i.e., additive zero)
  - the unit linear type (i.e., additive one)
@@ -18,7 +19,7 @@
  - binary products (i.e., additive conjunction)
  - linear function types (i.e., linear implication)
  - linear ∏-types (i.e., universal quantification)
- - multiplication and linearization (in particular, the linear exponential)
+ - multiplication and linearization, and, as a consequence, the linear exponential
  - equalizers
 
  The following has to be note: each subsingleton assembly is modest. Concretely,
@@ -50,6 +51,7 @@ Require Import Assemblies.LinearAssembly.
 Require Import Assemblies.LinearAssemblyMonoidal.
 Require Import Assemblies.ModestSet.
 Require Import Types.DependentProducts.
+Require Import Types.DependentSums.
 Require Import Types.FiberAssembly.
 Require Import Types.Terms.
 Require Import Types.ImpredicativeUniverse.
@@ -274,6 +276,34 @@ Section PropUniverse.
     apply isapropdirprod.
     - apply HX₁.
     - apply HX₂.
+  Qed.
+
+  Proposition is_subsingleton_dep_assembly_ext_id
+              {Γ : assembly A}
+              (X : dep_assembly Γ)
+    : is_subsingleton_dep_assembly (dep_assembly_ext_id X).
+  Proof.
+    intros ((x₁ & xx₁) & xx₂).
+    use invproofirrelevance.
+    cbn.
+    intros ((x₂ & yy₁) & yy₂ & p) ((x₃ & zz₁) & zz₂ & q).
+    cbn in *.
+    use subtypePath.
+    {
+      intros x.
+      use isapropdirprod.
+      {
+        apply isapropunit.
+      }
+      use isaset_total2.
+      - use isaset_total2.
+        + apply setproperty.
+        + intro.
+          apply setproperty.
+      - intro.
+        apply setproperty.
+    }
+    exact (maponpaths pr1 (p @ !q)).
   Qed.
 End PropUniverse.
 

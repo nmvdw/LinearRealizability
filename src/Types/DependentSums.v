@@ -22,6 +22,7 @@
  1. Construction of dependent sums
  2. Verification of the Beck-Chevalley condition
  3. Strong dependent sums of assemblies
+ 4. The identity type
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -563,4 +564,29 @@ Section DependentAssemblySums.
          induction p ;
          apply idpath).
   Defined.
+
+  (** * 4. The identity type *)
+  Definition assembly_diag
+             {Γ : assembly A}
+             (X : dep_assembly Γ)
+    : assembly_morphism
+        (total_assembly X)
+        (total_assembly (dep_assembly_subst (total_assembly_pr X) X)).
+  Proof.
+    use (PullbackArrow
+           (make_Pullback
+              _
+              (total_assembly_pullback (total_assembly_pr X) X))).
+    - apply identity.
+    - apply identity.
+    - apply idpath.
+  Defined.
+
+  Definition dep_assembly_ext_id
+             {Γ : assembly A}
+             (X : dep_assembly Γ)
+    : dep_assembly (total_assembly (dep_assembly_subst (total_assembly_pr X) X))
+    := dep_sum_assembly
+         (assembly_diag X)
+         (terminal_dep_assembly _).
 End DependentAssemblySums.
