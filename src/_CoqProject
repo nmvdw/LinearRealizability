@@ -20,27 +20,12 @@ InternalCategories/TerminalInternalCat.v
 InternalCategories/ProdInternalCat.v
 InternalCategories/BicatOfInternalCat.v
 
-PseudoMonoid/Basics.v
-PseudoMonoid/FinalTransformation.v
-PseudoMonoid/Pr1Transformation.v
-PseudoMonoid/Pr2Transformation.v
-PseudoMonoid/ProdTransformation/Data.v
-PseudoMonoid/ProdTransformation/Naturality.v
-PseudoMonoid/ProdTransformation/Identity.v
-PseudoMonoid/ProdTransformation/Composition.v
-PseudoMonoid/ProdTransformation.v
-PseudoMonoid/ProdPseudoFunctor.v
-
 SplitFibration/SplitDispSetCat.v
 SplitFibration/TerminalSplitFib.v
 SplitFibration/BinProductSplitFib.v
 SplitFibration/TwoCatSplitDispSetCat.v
 SplitFibration/BicatSplitDispSetCat.v
 SplitFibration/Externalisation.v
-
-PseudoMonoid/PseudoMonoidOps.v
-PseudoMonoid/LiftPseudoMonoid/LiftOps.v
-PseudoMonoid/PseudoMonoidOpsLaws.v
 
 Types/LinearCompCat.v
 
@@ -70,6 +55,7 @@ Types/LinearPi.v
 Types/LinearFiber.v
 Types/LinearNonLinear.v
 Types/Terms.v
+Types/Prop.v
 Types/ImpredicativeUniverse.v
 
 Types/LinearRealizabilityModel.v
