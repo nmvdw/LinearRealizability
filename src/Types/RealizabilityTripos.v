@@ -444,7 +444,7 @@ Section RealizabilityTripos.
   Definition realizability_first_order_preoder_hyperdoctrine
     : first_order_preorder_hyperdoctrine.
   Proof.
-    simple refine (_ ,, _ ,, _ ,, _ ,, _ ,, _ ,, _ ,, _) ; cbn.
+    use make_first_order_preorder_hyperdoctrine_all.
     - exact realizability_preorder_hyperdoctrine.
     - exact fiberwise_terminal_realizability.
     - exact fiberwise_initial_realizability.

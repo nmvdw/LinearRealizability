@@ -19,10 +19,44 @@ Require Import UniMath.Bicategories.Limits.Products.
 Import Products.Notations.
 Require Import UniMath.Bicategories.Limits.ProductEquivalences.
 
-Require Import PseudoMonoid.Basics.
-
 Local Open Scope cat.
 
+Coercion bifinal_obj_to_obj
+         {B : bicat}
+         (T : bifinal_obj B)
+  : B
+  := pr1 T.
+         
+Coercion bifinal_obj_to_is_bifinal
+         {B : bicat}
+         (T : bifinal_obj B)
+  : is_bifinal T
+  := pr2 T.
+
+Definition bicat_with_finprod
+  : UU
+  := ∑ (B : bicat), bifinal_obj B × has_binprod B.
+
+Coercion bicat_with_finprod_to_bicat
+         (B : bicat_with_finprod)
+  : bicat
+  := pr1 B.
+         
+Definition bicat_with_finprod_final
+           (B : bicat_with_finprod)
+  : bifinal_obj B
+  := pr12 B.
+
+Definition bicat_with_finprod_binprod
+           (B : bicat_with_finprod)
+  : has_binprod B
+  := pr22 B.
+
+Coercion bicat_with_finprod_to_bicat_with_binprod
+         (B : bicat_with_finprod)
+  : bicat_with_binprod
+  := pr1 B ,, bicat_with_finprod_binprod B.
+         
 Definition mor_between_binproducts
            {B : bicat}
            {x y : B}
@@ -269,7 +303,7 @@ Proof.
     + apply property_from_invertible_2cell.
     + apply property_from_invertible_2cell.
 Defined.
-           
+
 Definition psfunctor_preserves_final_chosen
            {B₁ B₂ : bicat}
            (F : psfunctor B₁ B₂)
@@ -555,15 +589,15 @@ Section PreservesBinProdsAdjequiv.
       + exact is_invertible_2cell_preserves_binprods_adjequiv_counit.
   Defined.
 End PreservesBinProdsAdjequiv.
-
+(*
 Section PseudoFunctorPreservesCartesian.
   Context {B₁ B₂ : bicat_with_finprod}
           (F : psfunctor B₁ B₂).
 
   Let T₁ : bifinal_obj B₁ := bicat_with_finprod_final B₁.
   Let T₂ : bifinal_obj B₂ := bicat_with_finprod_final B₂.
-  Let BP₁ : has_binprod B₁ := pr22 B₁.
-  Let BP₂ : has_binprod B₂ := pr22 B₂.
+  Let BP₁ : has_binprod B₁ := bicat_with_finprod_binprod B₁.
+  Let BP₂ : has_binprod B₂ := bicat_with_finprod_binprod B₂.
 
   Definition psfunctor_preserves_cartesian_terminal
              (HF : preserves_bifinal F)
@@ -582,7 +616,7 @@ Section PseudoFunctorPreservesCartesian.
         apply HF.
         exact T₁.
   Defined.
-
+  
   Definition psfunctor_preserves_cartesian_prod_cell
              (HF : preserves_binprods F)
              {x : B₁}
@@ -642,3 +676,4 @@ Section PseudoFunctorPreservesCartesian.
     - exact (psfunctor_preserves_cartesian_prod HF₂ (pr2 Hx)).
   Defined.
 End PseudoFunctorPreservesCartesian.
+ *)

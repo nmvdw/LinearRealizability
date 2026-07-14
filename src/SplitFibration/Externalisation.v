@@ -38,7 +38,6 @@ Require Import InternalCategories.TwoCatOfInternalCat.
 Require Import InternalCategories.TerminalInternalCat.
 Require Import InternalCategories.ProdInternalCat.
 Require Import InternalCategories.BicatOfInternalCat.
-Require Import PseudoMonoid.Basics.
 
 Local Open Scope cat.
 
