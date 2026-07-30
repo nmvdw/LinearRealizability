@@ -581,7 +581,7 @@ Section LinearSigma.
       etrans.
       {
         do 2 apply maponpaths.
-        exact (fiber_functor_from_cleaving_lin_dep_assembly _ _ _).
+        exact (fiber_functor_from_cleaving_lin_dep_assembly p₁ _ _).
       }
       cbn.
       use dep_sum_set_fam_eq.

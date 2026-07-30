@@ -222,7 +222,7 @@ Section DependentAssemblyProduct.
         etrans.
         {
           apply maponpaths.
-          use fiber_functor_from_cleaving_dep_assembly.
+          use (fiber_functor_from_cleaving_dep_assembly s).
         }
         apply idpath.
       Qed.
@@ -264,7 +264,7 @@ Section DependentAssemblyProduct.
           etrans.
           {
             apply maponpaths.
-            use fiber_functor_from_cleaving_dep_assembly.
+            use (fiber_functor_from_cleaving_dep_assembly s).
           }
           cbn.
           apply idpath.
@@ -275,7 +275,7 @@ Section DependentAssemblyProduct.
           etrans.
           {
             apply maponpaths.
-            use fiber_functor_from_cleaving_dep_assembly.
+            use (fiber_functor_from_cleaving_dep_assembly s).
           }
           cbn.
           apply idpath.
