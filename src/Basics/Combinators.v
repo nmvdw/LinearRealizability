@@ -24,6 +24,7 @@
  11. Combinators for the total space of a dependent assembly
  12. Combinators for dependent sums
  13. Combinators for dependent products
+ 14. Combinators for the internal logic of assemblies
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -210,6 +211,136 @@ Proof.
   rewrite lam_term_single.
   simpl.
   rewrite combinatory_algebra_ks_eq.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_pair_fun_two
+           (A : combinatory_algebra)
+  : A
+  := Λ (V 4 • (V 0 • V 2 • V 3) • (V 1 • V 2 • V 3)).
+
+Notation "'pairf2'" := (combinatory_algebra_pair_fun_two _) : ca.
+
+Proposition combinatory_algebra_pr1_pair_fun_two
+            {A : combinatory_algebra}
+            (a₁ a₂ b₁ b₂ : A)
+  : π₁ · (pairf2 · a₁ · a₂ · b₁ · b₂) = a₁ · b₁ · b₂.
+Proof.
+  unfold combinatory_algebra_pr1, ca_abs.
+  rewrite lam_term_single.
+  simpl.
+  unfold combinatory_algebra_pair, ca_abs.
+  etrans.
+  {
+    do 4 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  etrans.
+  {
+    do 3 apply maponpaths_2.
+    apply lam_term_multiple.
+  }  
+  rewrite !lam_term_multiple.
+  rewrite lam_term_single.
+  simpl.
+  rewrite combinatory_algebra_k_eq.
+  apply idpath.
+Qed.
+
+Proposition combinatory_algebra_pr2_pair_fun_two
+            {A : combinatory_algebra}
+            (a₁ a₂ b₁ b₂ : A)
+  : π₂ · (pairf2 · a₁ · a₂ · b₁ · b₂) = a₂ · b₁ · b₂.
+Proof.
+  unfold combinatory_algebra_pr2, ca_abs.
+  rewrite lam_term_single.
+  simpl.
+  unfold combinatory_algebra_pair, ca_abs.
+  etrans.
+  {
+    do 4 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  etrans.
+  {
+    do 3 apply maponpaths_2.
+    apply lam_term_multiple.
+  }  
+  rewrite !lam_term_multiple.
+  rewrite lam_term_single.
+  simpl.
+  rewrite combinatory_algebra_ks_eq.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_K_pr1
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co π₁ • V 1).
+
+Proposition combinatory_algebra_K_pr1_eq
+            {A : combinatory_algebra}
+            (a b : A)
+  : combinatory_algebra_K_pr1 A · a · b = π₁ · b.
+Proof.
+  unfold combinatory_algebra_K_pr1.
+  etrans.
+  {
+    apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_single.
+  cbn.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_K_pr2
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co π₂ • V 1).
+
+Proposition combinatory_algebra_K_pr2_eq
+            {A : combinatory_algebra}
+            (a b : A)
+  : combinatory_algebra_K_pr2 A · a · b = π₂ · b.
+Proof.
+  unfold combinatory_algebra_K_pr2.
+  etrans.
+  {
+    apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_single.
+  cbn.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_fun_pair
+           (A : combinatory_algebra)
+  : A
+  := Λ (V 0 • (V 1 • V 3) • (V 2 • V 4)).
+
+Proposition combinatory_algebra_fun_pair_eq
+            {A : combinatory_algebra}
+            (a f₁ f₂ b₁ b₂ : A)
+  : combinatory_algebra_fun_pair A · a · f₁ · f₂ · b₁ · b₂
+    =
+    a · (f₁ · b₁) · (f₂ · b₂).
+Proof.
+  unfold combinatory_algebra_fun_pair.
+  etrans.
+  {
+    do 4 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  etrans.
+  {
+    do 3 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite !lam_term_multiple.
+  rewrite lam_term_single.
+  cbn.
   apply idpath.
 Qed.
 
@@ -717,6 +848,54 @@ Proof.
   apply idpath.
 Qed.
 
+Definition combinatory_algebra_comprehension
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co pair • (V 0 • (Co π₁ • V 2)) • (V 1 • (Co π₁ • V 2) • (Co π₂ • V 2))).
+
+Proposition combinatory_algebra_comprehension_eq
+            {A : combinatory_algebra}
+            (a b c : A)
+  : combinatory_algebra_comprehension A · a · b · c
+    =
+    pair · (a · (π₁ · c)) · (b · (π₁ · c) · (π₂ · c)).
+Proof.
+  unfold combinatory_algebra_comprehension.
+  etrans.
+  {
+    do 2 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_multiple.
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_comprehension_term
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co pair • (V 0 • V 2) • (V 1 • V 2 • V 0)).
+
+Proposition combinatory_algebra_comprehension_term_eq
+            {A : combinatory_algebra}
+            (a b c : A)
+  : combinatory_algebra_comprehension_term A · a · b · c
+    =
+    pair · (a · c) · (b · c · a).
+Proof.
+  unfold combinatory_algebra_comprehension.
+  etrans.
+  {
+    do 2 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_multiple.
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
 (** * 12. Combinators for dependent sums *)
 Definition combinatory_algebra_dep_sum_pr
            (A : combinatory_algebra)
@@ -854,6 +1033,251 @@ Proof.
     apply maponpaths_2.
     apply lam_term_multiple.
   }
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+(** * 14. Combinators for the internal logic of assemblies *)
+Definition combinatory_algebra_disj_inl
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co pair • Co K • V 1).
+
+Proposition combinatory_algebra_disj_inl_eq
+            {A : combinatory_algebra}
+            (b₁ b₂ : A)
+  : combinatory_algebra_disj_inl A · b₁ · b₂ = pair · K · b₂.
+Proof.
+  unfold combinatory_algebra_disj_inl.
+  etrans.
+  {
+    apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_disj_inr
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co pair • Co K* • V 1).
+
+Proposition combinatory_algebra_disj_inr_eq
+            {A : combinatory_algebra}
+            (b₁ b₂ : A)
+  : combinatory_algebra_disj_inr A · b₁ · b₂ = pair · K* · b₂.
+Proof.
+  unfold combinatory_algebra_disj_inr.
+  etrans.
+  {
+    apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_disj_elim
+           (A : combinatory_algebra)
+  : A
+  := Λ ((Co π₁ • V 3 • V 0 • V 1) • V 2 • (Co π₂ • V 3)).
+
+Proposition combinatory_algebra_disj_elim_eq
+            {A : combinatory_algebra}
+            (a₁ a₂ b₁ b₂ : A)
+  : combinatory_algebra_disj_elim _ · a₁ · a₂ · b₁ · b₂
+    =
+    (π₁ · b₂ · a₁ · a₂) · b₁ · (π₂ · b₂).
+Proof.
+  unfold combinatory_algebra_disj_elim.
+  etrans.
+  {
+    do 3 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite !lam_term_multiple.
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_disj_subst
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co pair • (Co π₁ • V 1) • (Co π₂ • V 1)).
+
+Proposition combinatory_algebra_disj_subst_eq
+            {A : combinatory_algebra}
+            (b₁ b₂ : A)
+  : combinatory_algebra_disj_subst _ · b₁ · b₂
+    =
+    pair · (π₁ · b₂) · (π₂ · b₂).
+Proof.
+  unfold combinatory_algebra_disj_subst.
+  etrans.
+  {
+    apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_impl_intro
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co π₂ • V 1 • (Co π₁ • V 1)).
+
+Proposition combinatory_algebra_impl_intro_eq
+            {A : combinatory_algebra}
+            (b₁ b₂ : A)
+  : combinatory_algebra_impl_intro _ · b₁ · b₂ = π₂ · b₂ · (π₁ · b₂).
+Proof.
+  unfold combinatory_algebra_impl_intro.
+  etrans.
+  {
+    apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_impl_elim
+           (A : combinatory_algebra)
+  : A
+  := Λ (V 0 • V 1 • (Co pair • V 3 • V 2)).
+
+Proposition combinatory_algebra_impl_elim_eq
+            {A : combinatory_algebra}
+            (a b₁ b₂ b₃ : A)
+  : combinatory_algebra_impl_elim _ · a · b₁ · b₂ · b₃ = a · b₁ · (pair · b₃ · b₂).
+Proof.
+  unfold combinatory_algebra_impl_elim.
+  etrans.
+  {
+    do 3 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite !lam_term_multiple.
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_ex_elim
+           (A : combinatory_algebra)
+  : A
+  := Λ (V 0 • (Co pair • V 1 • (Co π₁ • V 2)) • (Co π₂ • V 2)).
+
+Proposition combinatory_algebra_ex_elim_eq
+            {A : combinatory_algebra}
+            (a b₁ b₂ : A)
+  : combinatory_algebra_ex_elim A · a · b₁ · b₂
+    =
+    a · (pair · b₁ · (π₁ · b₂)) · (π₂ · b₂).
+Proof.
+  unfold combinatory_algebra_ex_elim.
+  etrans.
+  {
+    do 2 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_multiple.
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_ex_subst
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co pair • (Co π₁ • V 1) • (Co π₂ • V 1)).
+
+Proposition combinatory_algebra_ex_subst_eq
+            {A : combinatory_algebra}
+            (b₁ b₂ : A)
+  : combinatory_algebra_ex_subst A · b₁ · b₂
+    =
+    pair · (π₁ · b₂) · (π₂ · b₂).
+Proof.
+  unfold combinatory_algebra_ex_subst.
+  etrans.
+  {
+    apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_all_intro
+           (A : combinatory_algebra)
+  : A
+  := Λ (V 1 • (Co π₂ • V 0)).
+
+Proposition combinatory_algebra_all_intro_eq
+            {A : combinatory_algebra}
+            (b₁ b₂ : A)
+  : combinatory_algebra_all_intro _ · b₁ · b₂ = b₂ · (π₂ · b₁).
+Proof.
+  unfold combinatory_algebra_all_intro.
+  etrans.
+  {
+    apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_all_elim
+           (A : combinatory_algebra)
+  : A
+  := Λ (V 0 • (Co pair • V 1 • V 3) • V 2).
+
+Proposition combinatory_algebra_all_elim_eq
+            {A : combinatory_algebra}
+            (a b₁ b₂ b₃ : A)
+  : combinatory_algebra_all_elim _ · a · b₁ · b₂ · b₃ = a · (pair · b₁ · b₃) · b₂.
+Proof.
+  unfold combinatory_algebra_all_elim.
+  etrans.
+  {
+    do 3 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite !lam_term_multiple.
+  rewrite lam_term_single.
+  simpl.
+  apply idpath.
+Qed.
+
+Definition combinatory_algebra_all_subst
+           (A : combinatory_algebra)
+  : A
+  := Λ (V 1 • V 2).
+
+Proposition combinatory_algebra_all_subst_eq
+            {A : combinatory_algebra}
+            (b₁ b₂ b₃ : A)
+  : combinatory_algebra_all_subst _ · b₁ · b₂ · b₃ = b₂ · b₃.
+Proof.
+  unfold combinatory_algebra_all_subst.
+  etrans.
+  {
+    do 2 apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite !lam_term_multiple.
   rewrite lam_term_single.
   simpl.
   apply idpath.

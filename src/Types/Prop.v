@@ -92,9 +92,9 @@ Section PropUniverse.
     := λ x, discrete_assembly A (funset A hPropset).
 
   Proposition not_modest_assembly_prop_universe_type
-             (Γ : assembly A)
-             (H : is_modest_dep_assembly (assembly_prop_universe_type Γ))
-             (x : Γ)
+              (Γ : assembly A)
+              (H : is_modest_dep_assembly (assembly_prop_universe_type Γ))
+              (x : Γ)
     : ∅.
   Proof.
     specialize (H x I (λ _, htrue) (λ _, hfalse) tt tt).

@@ -5,6 +5,7 @@
  Contents
  1. Definition of terms
  2. Equivalence with sections
+ 3. Operations on terms
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -34,6 +35,16 @@ Section TermsAssemblies.
     := ∑ (t : section_set_fam X),
        ∃ (a : A), ∏ (b : A) (x : Γ), b ⊩ x → (a · b)%ca ⊩ t x.
 
+  Proposition isaset_assembly_term
+    : isaset assembly_term.
+  Proof.
+    use isaset_total2.
+    - apply isaset_section_set_fam.
+    - intro.
+      apply isasetaprop.
+      apply propproperty.
+  Qed.
+  
   Definition make_assembly_term
              (t : ∏ (x : Γ), X x)
              (H : ∃ (a : A), ∏ (b : A) (x : Γ), b ⊩ x → (a · b)%ca ⊩ t x)
@@ -50,7 +61,7 @@ Section TermsAssemblies.
 
   Proposition assembly_term_tracker
               (t : assembly_term)
-    :  ∃ (a : A), ∏ (b : A) (x : Γ), b ⊩ x → (a · b)%ca ⊩ t x.
+    : ∃ (a : A), ∏ (b : A) (x : Γ), b ⊩ x → (a · b)%ca ⊩ t x.
   Proof.
     exact (pr2 t).
   Defined.
@@ -166,3 +177,50 @@ Section TermsAssemblies.
          apply setproperty).
   Defined.
 End TermsAssemblies.
+
+Arguments assembly_term_tracker {A Γ X} t.
+
+(** * 3. Operations on terms *)
+Definition subst_assembly_term
+           {A : combinatory_algebra}
+           {Γ Δ : assembly A}
+           (s : assembly_morphism Γ Δ)
+           {X : dep_assembly Δ}
+           (t : assembly_term X)
+  : assembly_term (dep_assembly_subst s X).
+Proof.
+  use make_assembly_term.
+  - exact (λ x, t (s x)).
+  - abstract
+      (pose proof (assembly_term_tracker t) as p ;
+       revert p ;
+       use factor_through_squash_hProp ;
+       intros ( a & p ) ;
+       pose proof (assembly_morphism_tracked s) as q ;
+       revert q ;
+       use factor_through_squash_hProp ;
+       intros ( b & q ) ;
+       use hinhpr ;
+       refine (B · a · b ,, _)%ca ;
+       intros c x r ;
+       rewrite combinatory_algebra_b_eq ;
+       apply p ;
+       exact (q c x r)).
+Defined.
+
+Definition var_assembly_term
+           {A : combinatory_algebra}
+           {Γ : assembly A}
+           (X : dep_assembly Γ)
+  : assembly_term (dep_assembly_subst (total_assembly_pr X) X).
+Proof.
+  use make_assembly_term.
+  - exact (λ x, pr2 x).
+  - abstract
+      (use hinhpr ;
+       cbn ;
+       refine (π₂ ,, _) ;
+       intros a x pq ;
+       destruct pq as [ p q ] ;
+       exact q).
+Defined.

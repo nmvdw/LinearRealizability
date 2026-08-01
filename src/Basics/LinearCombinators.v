@@ -24,6 +24,7 @@
  17. Linear sigma
  18. Combinators for the Beck-Chevalley condition
  19. Combinators to verify Frobenius reciprocity
+ 20. Combinators for the internal logic
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -1151,5 +1152,138 @@ Proof.
   calc_beta.
   rewrite lca_let_combinator_eq.
   unfold lca_frobenius_pair.
+  calc_beta.
+Qed.
+
+(** * 20. Combinators for the internal logic *)
+Definition lca_forall_intro
+           (A : linear_combinatory_algebra)
+           (AC := lca_to_ca A)
+  : A.
+Proof.
+  pose (V 0 • (Excl (Co (π₂%ca : AC) • V 1))) as t.
+  simple refine (closed_lin_term_eval (Λn (Λl t)) _) ;
+      unfold t ;
+      check_linear_lam.
+Defined.
+
+Proposition lca_forall_intro_eq
+            {A : linear_combinatory_algebra}
+            (AC := lca_to_ca A)
+            (b₁ b₂ : A)
+  : lca_forall_intro A · (!b₁) · b₂ = b₂ · !(((π₂%ca : AC) : A) · (!b₁)).
+Proof.
+  unfold lca_forall_intro.
+  calc_beta.
+Qed.
+
+Definition lca_forall_elim
+           (A : linear_combinatory_algebra)
+           (AC := lca_to_ca A)
+  : A.
+Proof.
+  pose (V 3 • (Excl (Co (pair%ca : AC) • V 2 • V 0)) • V 1) as t.
+  simple refine (closed_lin_term_eval (Λl (Λn (Λl (Λn t)))) _) ;
+      unfold t ;
+      check_linear_lam.
+Defined.
+
+Proposition lca_forall_elim_eq
+            {A : linear_combinatory_algebra}
+            (AC := lca_to_ca A)
+            (a b₁ b₂ b₃ : A)
+  : lca_forall_elim A · a · (!b₁) · b₂ · (!b₃) = a · (!((pair%ca : AC) · b₁ · b₃)) · b₂.
+Proof.
+  unfold lca_forall_elim.
+  cbn.
+  calc_beta.
+Qed.
+
+Definition lca_exists_intro
+           (A : linear_combinatory_algebra)
+           (AC := lca_to_ca A)
+  : A.
+Proof.
+  pose (Co lin_pair • (Excl (Co ((π₂ : AC)%ca) • V 1)) • V 0)
+    as t.
+  simple refine (closed_lin_term_eval (Λn (Λl t)) _) ;
+      unfold t ;
+      check_linear_lam.
+Defined.
+
+Proposition lca_exists_intro_eq
+            {A : linear_combinatory_algebra}
+            (AC := lca_to_ca A)
+            (a₁ a₂ : A)
+  : lca_exists_intro A · (!a₁) · a₂
+    =
+    lin_pair · (!((π₂ : AC)%ca · a₁)) · a₂.
+Proof.
+  unfold lca_exists_intro.
+  cbn.
+  calc_beta.
+Qed.
+
+Definition lca_exists_elim_help
+           (A : linear_combinatory_algebra)
+           (AC := lca_to_ca A)
+  : A.
+Proof.
+  pose (V 1 • Excl (Co (pair : AC)%ca • V 0 • V 3) • V 2)
+    as t.
+  simple refine (closed_lin_term_eval (Λn (Λl (Λl (Λn t)))) _) ;
+      unfold t ;
+      check_linear_lam.
+Defined.
+
+Definition lca_exists_elim
+           (A : linear_combinatory_algebra)
+           (AC := lca_to_ca A)
+  : A.
+Proof.
+  pose (Co lca_let • V 0 • Co (lca_exists_elim_help A) • V 2 • V 1)
+    as t.
+  simple refine (closed_lin_term_eval (Λl (Λn (Λl t))) _) ;
+      unfold t ;
+      check_linear_lam.
+Defined.
+
+Proposition lca_exists_elim_eq
+            {A : linear_combinatory_algebra}
+            (AC := lca_to_ca A)
+            (a b c₁ c₂ : A)
+  : lca_exists_elim A · a · (!b) · (lin_pair · (!c₁) · c₂)
+    =
+    a · (!((pair : AC)%ca · b · c₁)) · c₂.
+Proof.
+  cbn.
+  unfold lca_exists_elim.
+  calc_beta.
+  rewrite lca_let_combinator_eq.
+  unfold lca_exists_elim_help.
+  calc_beta.
+Qed.
+
+Definition lca_equality_elim
+           (A : linear_combinatory_algebra)
+           (AC := lca_to_ca A)
+  : A.
+Proof.
+  pose (V 2 • Excl (Co (π₁ : AC)%ca • V 1) • V 0) as t.
+  simple refine (closed_lin_term_eval (Λl (Λn (Λl t))) _) ;
+      unfold t ;
+      check_linear_lam.
+Defined.
+
+Proposition lca_equality_elim_eq
+            {A : linear_combinatory_algebra}
+            (AC := lca_to_ca A)
+            (a b₁ b₂ : A)
+  : lca_equality_elim A · a · (! b₁) · b₂
+    =
+    a · (!((π₁%ca : AC) · b₁)) · b₂.
+Proof.
+  cbn.
+  unfold lca_equality_elim.
   calc_beta.
 Qed.

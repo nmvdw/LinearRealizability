@@ -59,3 +59,9 @@ Types/Prop.v
 Types/ImpredicativeUniverse.v
 
 Types/LinearRealizabilityModel.v
+
+Logic/Formulas.v
+Logic/Connectives.v
+Logic/CartesianLogic.v
+Logic/FiberMonoidal.v
+Logic/LinearLogic.v

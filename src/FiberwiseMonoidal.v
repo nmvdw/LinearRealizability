@@ -39,6 +39,159 @@ Definition fiberwise_monoidal_data
        (M y) (M x)
        (fiber_functor_from_cleaving D HD f).
 
+Definition make_fiberwise_monoidal_data
+           {C : category}
+           {D : disp_cat C}
+           (HD : cleaving D)
+           (M : ∏ (x : C), monoidal (D[{x}]))
+           (HM : ∏ (x y : C)
+                   (f : x --> y),
+                 fmonoidal
+                   (M y) (M x)
+                   (fiber_functor_from_cleaving D HD f))
+  : fiberwise_monoidal_data HD
+  := M ,, HM.
+
+Section LocallyPropositionalFiberwiseMonoidal.
+  Context {C : category}
+          {D : disp_cat C}
+          {HD : cleaving D}
+          (HD' : locally_propositional D)
+          (m : ∏ (x : C), D x → D x → D x)
+          (ml : ∏ (x : C)
+                  (b a₁ a₂ : D x),
+                a₁ -->[ identity _ ] a₂
+                →
+                m x a₁ b -->[ identity _ ] m x a₂ b)
+          (mr : ∏ (x : C)
+                  (a b₁ b₂ : D x),
+                b₁ -->[ identity _ ] b₂
+                →
+                m x a b₁ -->[ identity _ ] m x a b₂)
+          (u : ∏ (x : C), D x)
+          (l : ∏ (x : C)
+                 (b : D x),
+               m x (u x) b -->[ identity _ ] b)
+          (linv : ∏ (x : C)
+                    (b : D x),
+                  b -->[ identity _ ] m x (u x) b)
+          (r : ∏ (x : C)
+                 (a : D x),
+               m x a (u x) -->[ identity _ ] a)
+          (rinv : ∏ (x : C)
+                    (a : D x),
+                  a -->[ identity _ ] m x a (u x))
+          (assocl : ∏ (x : C)
+                      (a b c : D x),
+                     m x (m x a b) c -->[ identity _ ] m x a (m x b c))
+          (assocr : ∏ (x : C)
+                      (a b c : D x),
+                    m x a (m x b c) -->[ identity _ ] m x (m x a b) c)
+          (subm : ∏ (x y : C)
+                    (f : x --> y)
+                    (a b : D y),
+                  m x (HD y x f a) (HD y x f b)
+                  -->[ identity _ ]
+                  pr1 (HD y x f (m y a b)))
+          (subminv : ∏ (x y : C)
+                       (f : x --> y)
+                       (a b : D y),
+                     pr1 (HD y x f (m y a b))
+                     -->[ identity _ ]
+                     m x (HD y x f a) (HD y x f b))
+          (subu : ∏ (x y : C)
+                    (f : x --> y),
+                  u x
+                  -->[ identity _ ]
+                  pr1 (HD y x f (u y)))
+          (subuinv : ∏ (x y : C)
+                       (f : x --> y),
+                     pr1 (HD y x f (u y))
+                     -->[ identity _ ]
+                     u x).
+  
+  Definition make_fiberwise_monoidal_data_locally_propositional_monoidal_data
+             (x : C)
+    : monoidal_data (D[{x}]).
+  Proof.
+    simple refine ((_ ,, _ ,, _) ,, _ ,, _ ,, _ ,, _ ,, _ ,, _ ,, _).
+    - exact (m x).
+    - exact (mr x).
+    - exact (ml x).
+    - exact (u x).
+    - exact (l x).
+    - exact (linv x).
+    - exact (r x).
+    - exact (rinv x).
+    - exact (assocl x).
+    - exact (assocr x).
+  Defined.
+  
+  Definition make_fiberwise_monoidal_data_locally_propositional_monoidal
+             (x : C)
+    : monoidal (D[{x}]).
+  Proof.
+    simple refine (_ ,, _).
+    - exact (make_fiberwise_monoidal_data_locally_propositional_monoidal_data x).
+    - abstract
+        (repeat split ; try (intro ; intros) ; apply HD').
+  Defined.
+
+  Definition make_fiberwise_monoidal_data_locally_propositional_fmonoidal_data
+             {x y : C}
+             (f : x --> y)
+    : fmonoidal_data
+        (make_fiberwise_monoidal_data_locally_propositional_monoidal y)
+        (make_fiberwise_monoidal_data_locally_propositional_monoidal x)
+        (fiber_functor_from_cleaving D HD f).
+  Proof.
+    simple refine (_ ,, _).
+    - exact (subm x y f).
+    - exact (subu x y f).
+  Defined.
+
+  Definition make_fiberwise_monoidal_data_locally_propositional_fmonoidal_lax
+             {x y : C}
+             (f : x --> y)
+    : fmonoidal_lax
+        (make_fiberwise_monoidal_data_locally_propositional_monoidal y)
+        (make_fiberwise_monoidal_data_locally_propositional_monoidal x)
+        (fiber_functor_from_cleaving D HD f).
+  Proof.
+    simple refine (_ ,, _).
+    - exact (make_fiberwise_monoidal_data_locally_propositional_fmonoidal_data f).
+    - abstract
+        (repeat split ; try (intro ; intros) ; apply HD').
+  Defined.
+
+  Definition make_fiberwise_monoidal_data_locally_propositional_fmonoidal
+             {x y : C}
+             (f : x --> y)
+    : fmonoidal
+        (make_fiberwise_monoidal_data_locally_propositional_monoidal y)
+        (make_fiberwise_monoidal_data_locally_propositional_monoidal x)
+        (fiber_functor_from_cleaving D HD f).
+  Proof.
+    simple refine (_ ,, _).
+    - exact (make_fiberwise_monoidal_data_locally_propositional_fmonoidal_lax f).
+    - split.
+      + intros a b.
+        refine (subminv x y f a b ,, _).
+        abstract (split ; apply HD').
+      + refine (subuinv x y f ,, _).
+        abstract (split ; apply HD').
+  Defined.
+  
+  Definition make_fiberwise_monoidal_data_locally_propositional         
+    : fiberwise_monoidal_data HD.
+  Proof.
+    use make_fiberwise_monoidal_data.
+    - exact make_fiberwise_monoidal_data_locally_propositional_monoidal.
+    - intros x y f.
+      exact (make_fiberwise_monoidal_data_locally_propositional_fmonoidal f).
+  Defined.
+End LocallyPropositionalFiberwiseMonoidal.
+
 Definition fiber_monoidal
            {C : category}
            {D : disp_cat C}
@@ -103,6 +256,17 @@ Definition fiberwise_monoidal_laws
         (fiber_functor_strong_monoidal_structure M (f · g))
         (fiber_functor_from_cleaving_comp HD g f)).
 
+Proposition fiberwise_monoidal_laws_locally_propositional
+            {C : category}
+            {D : disp_cat C}
+            {HD : cleaving D}
+            (HD' : locally_propositional D)
+            (M : fiberwise_monoidal_data HD)
+  : fiberwise_monoidal_laws M.
+Proof.
+  split ; intro ; intros ; split ; try (intro ; intros) ; apply HD'.
+Qed.
+
 Definition fiberwise_monoidal
            {C : category}
            {D : disp_cat C}
@@ -118,6 +282,15 @@ Definition make_fiberwise_monoidal
            (HM : fiberwise_monoidal_laws M)
   : fiberwise_monoidal HD
   := M ,, HM.
+
+Definition make_fiberwise_monoidal_locally_propositional
+           {C : category}
+           {D : disp_cat C}
+           (HD : cleaving D)
+           (HD' : locally_propositional D)
+           (M : fiberwise_monoidal_data HD)
+  : fiberwise_monoidal HD
+  := M ,, fiberwise_monoidal_laws_locally_propositional HD' M.
 
 Coercion fiberwise_monoidal_to_data
          {C : category}
@@ -184,6 +357,38 @@ Definition make_fiberwise_symmetric_monoidal_structure
                    (strong_monoidal_fiber_functor M f))
   : fiberwise_symmetric_monoidal_structure M
   := S ,, Sf.
+
+Section SymmetricLocallyPropositional.
+  Context {C : category}
+          {D : disp_cat C}
+          {HD : cleaving D}
+          (HD' : locally_propositional D)
+          (M : fiberwise_monoidal HD)
+          (sym : ∏ (x : C)
+                   (a b : M x),
+                monoidal_cat_tensor_pt a b --> monoidal_cat_tensor_pt b a).
+          
+  Definition make_fiberwise_symmetric_monoidal_structure_locally_propositional_sym
+             (x : C)
+    : symmetric (M x).
+  Proof.
+    use make_symmetric.
+    - exact (sym x).
+    - abstract
+        (repeat split ; intros ; apply HD').
+  Defined.
+  
+  Definition make_fiberwise_symmetric_monoidal_structure_locally_propositional               
+    : fiberwise_symmetric_monoidal_structure M.
+  Proof.
+    use make_fiberwise_symmetric_monoidal_structure.
+    - exact make_fiberwise_symmetric_monoidal_structure_locally_propositional_sym.
+    - abstract
+        (intros x y f ;
+         intros a b ;
+         apply HD').
+  Defined.
+End SymmetricLocallyPropositional.
 
 Definition fiber_monoidal_symmetric
            {C : category}
