@@ -543,7 +543,6 @@ Proof.
        exact (Ha₁ ,, Ha₂)).
 Defined.
 
-  
 Definition pullbacks_cat_of_assembly
            (A : combinatory_algebra)
   : Pullbacks (cat_of_assembly A).

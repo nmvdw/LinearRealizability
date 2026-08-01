@@ -506,8 +506,8 @@ Section CartesianLogic.
     intros X t.
     refine (assembly_prop_comprehension t ,, _).
     abstract
-      (use assembly_morphism_eq ;
-       intros x ;
+      (use assembly_term_eq ;
+       intro x ;
        cbn ;
        apply idpath).
   Defined.

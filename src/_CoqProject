@@ -42,6 +42,7 @@ Assemblies/AssembliesStructure.v
 Assemblies/ModestSet.v
 Assemblies/PartialEqRel.v
 Assemblies/ModestSetEquiv.v
+Assemblies/PERInternalCat.v
 Assemblies/DependentAssembly.v
 Assemblies/LinearAssembly.v
 Assemblies/LinearAssemblyMonoidal.v

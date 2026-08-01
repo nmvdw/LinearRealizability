@@ -41,9 +41,9 @@
  <<
  Cartesian connectives
  NOTE:
-   the operations below assume that we are working with some *combinatory algebra* A
-   in case A is a linear combinatory algebra, then ! needs to be added at the appropriate
-   places
+   The operations below assume that we are working with some *combinatory algebra* A.
+   In case A is a linear combinatory algebra, then ! needs to be added at the appropriate
+   places, because `a · b` in the combinatory algebra `A_!` is defined to be `a · !b`.
 
       a ⊫_{x} ⊤        always
 
@@ -152,7 +152,8 @@
  ```
 
  We can also interpret equality as a linear connective, and then we get the
- same concrete description as for the Cartesian case.
+ same concrete description as for the Cartesian case. The same can be said
+ for membership.
 
  *)
 Require Import UniMath.MoreFoundations.All.

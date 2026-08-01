@@ -25,6 +25,7 @@
  12. Combinators for dependent sums
  13. Combinators for dependent products
  14. Combinators for the internal logic of assemblies
+ 15. Internal composition
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -1280,6 +1281,49 @@ Proof.
   rewrite !lam_term_multiple.
   rewrite lam_term_single.
   simpl.
+  apply idpath.
+Qed.
+
+(** * 15. Internal composition *)
+Definition internal_comp_combinator_help
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co π₂ • (Co π₂ • V 0) • (Co π₂ • (Co π₁ • V 0) • V 1)).
+
+Proposition internal_comp_combinator_help_eq
+            {A : combinatory_algebra}
+            (a b : A)
+  : internal_comp_combinator_help A · a · b = π₂ · (π₂ · a) · (π₂ · (π₁ · a) · b).
+Proof.
+  unfold internal_comp_combinator_help.
+  etrans.
+  {
+    apply maponpaths_2.
+    apply lam_term_multiple.
+  }
+  rewrite lam_term_single.
+  cbn.
+  apply idpath.
+Qed.
+           
+Definition internal_comp_combinator
+           (A : combinatory_algebra)
+  : A
+  := Λ (Co pair • Co I • (Co (internal_comp_combinator_help _) • V 0)).
+
+Proposition internal_comp_combinator_eq
+            {A : combinatory_algebra}
+            (a : A)
+  : internal_comp_combinator _ · a
+    =
+    pair · I · (internal_comp_combinator_help _ · a).
+Proof.
+  unfold internal_comp_combinator.
+  etrans.
+  {
+    apply lam_term_single.
+  }
+  cbn.
   apply idpath.
 Qed.
 

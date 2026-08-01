@@ -61,6 +61,79 @@ Proof.
        apply dom_ca_per_refl).
 Defined.
 
+Definition per_to_assembly_on_eq
+           {A : bi_algebra}
+           {R₁ R₂ : ca_per A}
+           (p : R₁ = R₂)
+  : assembly_morphism
+      (per_to_assembly R₁)
+      (per_to_assembly R₂).
+Proof.
+  use make_assembly_morphism.
+  - use setquotuniv.
+    + refine (λ x, setquotpr _ _).
+      refine (pr1 x ,, _).
+      abstract
+        (induction p ;
+         exact (pr2 x)).
+    + abstract
+        (intros x y q ;
+         use iscompsetquotpr ;
+         cbn in * ;
+         induction p ;
+         exact q).
+  - abstract
+      (induction p ;
+       use hinhpr ;
+       refine (I ,, _) ;
+       intros a ;
+       use setquotunivprop' ; [ intro ; apply propproperty | ] ;
+       intros x p ;
+       cbn in * ;
+       rewrite bi_algebra_i_eq ;
+       exact p).
+Defined.
+
+Proposition per_to_assembly_on_eq_idpath
+            {A : bi_algebra}
+            (R : ca_per A)
+  : per_to_assembly_on_eq (idpath R)
+    =
+    id_assembly_morphism_bi (per_to_assembly R).
+Proof.
+  use assembly_morphism_eq.
+  use setquotunivprop'.
+  {
+    intro.
+    apply setproperty.
+  }
+  cbn.
+  intro x.
+  apply maponpaths.
+  use subtypePath.
+  {
+    intro.
+    apply propproperty.
+  }
+  apply idpath.
+Qed.
+
+Proposition per_to_assembly_on_eq_path
+            {A : bi_algebra}
+            {R₁ R₂ : ca_per A}
+            (p₁ p₂ : R₁ = R₂)
+            {x y : per_to_assembly R₁}
+            (r : x = y)
+  : per_to_assembly_on_eq p₁ x = per_to_assembly_on_eq p₂ y.
+Proof.
+  induction r.
+  assert (p₁ = p₂) as ->.
+  {
+    apply (isaset_ca_per A).
+  }
+  apply idpath.
+Qed.
+           
 Definition per_to_modest_set
            {A : bi_algebra}
            (R : ca_per A)
