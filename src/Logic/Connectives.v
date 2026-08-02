@@ -61,7 +61,7 @@
 
       a ⊫ t₁ ⇒ t₂
         iff
-      for all b : A: if b ⊫_{x} t₁  then  a · b ⊩_{x} t₂
+      for all b : A: if b ⊫_{x} t₁  then  a · b ⊫_{x} t₂
 
       a ⊫_{x} ∀ (y : X) t
         iff
@@ -98,7 +98,7 @@
 
       a ⊫_{x} t₁ ⊸ t₂
         iff
-      for all b : A: if b ⊫_{x} t₁  then  a · b ⊩_{x} t₂
+      for all b : A: if b ⊫_{x} t₁  then  a · b ⊫_{x} t₂
 
       a ⊫_{x} t₁ & t₂
         iff
