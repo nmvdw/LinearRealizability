@@ -18,6 +18,7 @@ Require Import Basics.CombinatoryAlgebra.
 Require Import Basics.BIAlgebra.
 Require Import Basics.Combinators.
 Require Import Assemblies.CatOfAssemblies.
+Require Import Assemblies.AssembliesStructure.
 Require Import Assemblies.DependentAssembly.
 
 Local Open Scope ca.
@@ -181,6 +182,33 @@ End TermsAssemblies.
 Arguments assembly_term_tracker {A Γ X} t.
 
 (** * 3. Operations on terms *)
+Definition coerce_assembly_term
+           {A : combinatory_algebra}
+           {Γ : assembly A}
+           {X₁ X₂ : dep_assembly Γ}
+           (f : dep_assembly_morphism X₁ X₂ (id_assembly_morphism _))
+           (t : assembly_term X₁)
+  : assembly_term X₂.
+Proof.
+  use make_assembly_term.
+  - exact (λ γ, f γ (t γ)).
+  - abstract
+      (pose proof (dep_assembly_morphism_function_track f) as p ;
+       revert p ;
+       use factor_through_squash_hProp ;
+       intros (a & p) ;
+       pose proof (assembly_term_tracker t) as q ;
+       revert q ;
+       use factor_through_squash_hProp ;
+       intros (b & q) ;
+       use hinhpr ;
+       refine (S · a · b ,, _)%ca ;
+       intros c x r ;
+       rewrite combinatory_algebra_s_eq ;
+       specialize (q c x r) ;
+       exact (p x (t x) c (b · c)%ca r q)).
+Defined.
+
 Definition subst_assembly_term
            {A : combinatory_algebra}
            {Γ Δ : assembly A}
@@ -223,4 +251,31 @@ Proof.
        intros a x pq ;
        destruct pq as [ p q ] ;
        exact q).
+Defined.
+
+(** * 4. Terms of discrete assemblies *)
+Definition discrete_assembly_term_weq
+           {A : combinatory_algebra}
+           (X : hSet)
+           (Γ : assembly A)
+  : assembly_term (λ (_ : Γ), discrete_assembly A X) ≃ (Γ → X).
+Proof.
+  use weq_iso.
+  - exact (λ t γ, t γ).
+  - intro t.
+    use make_assembly_term.
+    + exact t.
+    + abstract
+        (use hinhpr ;
+         refine (I ,, _) ;
+         intros ;
+         exact tt).
+  - abstract
+      (intro t ;
+       use assembly_term_eq ;
+       intro γ ;
+       apply idpath).
+  - abstract
+      (intro x ;
+       apply idpath).
 Defined.
