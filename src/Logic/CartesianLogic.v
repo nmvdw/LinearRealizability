@@ -22,6 +22,7 @@
  12. Extensionality
  13. It is a tripos
  14. The comprehension functor
+ 15. Functional completeness
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -79,6 +80,17 @@ Section CartesianLogic.
     - apply locally_propositional_assembly_prop_disp_cat.
   Defined.
 
+  Definition assembly_prop_proves
+             {Γ : assembly A}
+             (t₁ t₂ : assembly_term (assembly_prop_universe_type Γ))
+    : UU
+    := dep_assembly_morphism
+         (assembly_prop_universe_el t₁)
+         (assembly_prop_universe_el t₂)
+         (id_assembly_morphism Γ).
+
+  Notation "t₁ ⊢ t₂" := (assembly_prop_proves t₁ t₂) (at level 100) : assembly.
+  
   (** * 2. Fiberwise terminal object *)
   Definition fiberwise_terminal_assembly_prop_disp_cat
     : fiberwise_terminal (cleaving_assembly_prop_disp_cat A).
@@ -86,7 +98,8 @@ Section CartesianLogic.
     use make_fiberwise_terminal_locally_propositional.
     - apply locally_propositional_assembly_prop_disp_cat.
     - exact assembly_truth_prop.
-    - abstract
+    - cbn.
+      abstract
         (intros Γ φ ;
          use (make_assembly_prop_proof I) ;
          intros ; cbn ;
@@ -306,7 +319,7 @@ Section CartesianLogic.
     use universal_quantifiers_from_chosen.
     use make_universal_quantifiers_chosen.
     - cbn.
-      exact (λ Γ X t, assembly_forall_prop t).
+      exact (λ Γ X t, assembly_forall_prop X t).
     - abstract
         (cbn ;
          intros Γ X t ;
@@ -350,7 +363,7 @@ Section CartesianLogic.
     use existential_quantifiers_from_chosen.
     use make_existential_quantifiers_chosen.
     - cbn.
-      exact (λ Γ X t, assembly_exists_prop t).
+      exact (λ Γ X t, assembly_exists_prop X t).
     - abstract
         (cbn ;
          intros Γ X t ;
@@ -715,5 +728,205 @@ Section CartesianLogic.
     }
     cbn.
     exact (assembly_morphism_eq_point q x).
-  Qed.    
+  Qed.
+
+  (** * 15. Functional completeness *)
+  Section FunctionalCompleteness.
+    Context {X₁ X₂ : assembly A}.
+
+    Context (t : assembly_term (assembly_prop_universe_type (X₁ ×a X₂))).
+
+    Let φ : assembly_term (assembly_prop_universe_type (terminal_assembly A))
+      := (∀a X₁ (∃a X₂ (subst_assembly_term ⟨ aπ₁ ·a aπ₂ , aπ₂ ⟩ t)))
+         ∧
+         (∀a X₁ (∀a X₂ (∀a X₂ (subst_assembly_term ⟨ aπ₁ ·a aπ₁ ·a aπ₂ , aπ₁ ·a aπ₂ ⟩ t
+                               ⇒ subst_assembly_term ⟨ aπ₁ ·a aπ₁ ·a aπ₂ , aπ₂ ⟩ t
+                               ⇒ aπ₁ ·a aπ₂ ≡ aπ₂)))).
+
+    Context (f_p : assembly_truth_prop _ ⊢ φ).
+    
+    Definition assembly_functional_completeness_ex_unique
+      : ∏ (x : X₁), ∃! (y : X₂), ∃ (a : A), ((t (x ,, y) a) : hProp).
+    Proof.
+      intro x.
+      pose proof (pr1 f_p tt (hinhpr (I ,, tt))) as p.
+      revert p.
+      use factor_through_squash.
+      {
+        apply isapropiscontr.
+      }
+      intros (a₁ & p₁ & p₂).
+      pose proof (assembly_realizes_el x) as q.
+      revert q.
+      use factor_through_squash.
+      {
+        apply isapropiscontr.
+      }
+      intros (a₂ & Hx).
+      specialize (p₁ x a₂ Hx).
+      revert p₁.
+      use factor_through_squash.
+      {
+        apply isapropiscontr.
+      }
+      intros (y & q₁ & q₂).
+      cbn in q₂.
+      use iscontraprop1.
+      - use invproofirrelevance.
+        intros (y₁ & r₁) (y₂ & r₂).
+        use subtypePath.
+        {
+          intro.
+          apply propproperty.
+        }
+        simpl.
+        revert r₁.
+        use factor_through_squash.
+        {
+          apply setproperty.
+        }
+        intros (b₁ & r₁).
+        revert r₂.
+        use factor_through_squash.
+        {
+          apply setproperty.
+        }
+        intros (b₂ & r₂).
+        pose proof (assembly_realizes_el y₁) as c.
+        revert c.
+        use factor_through_squash.
+        {
+          apply setproperty.
+        }
+        intros (c₁ & Hc₁).
+        pose proof (assembly_realizes_el y₂) as c.
+        revert c.
+        use factor_through_squash.
+        {
+          apply setproperty.
+        }
+        intros (c₂ & Hc₂).
+        simpl in p₂.
+        specialize (p₂ x a₂ Hx y₁ c₁ Hc₁ y₂ c₂ Hc₂).
+        exact (pr122 p₂).
+      - refine (y ,, _).
+        use hinhpr.
+        refine ((π₂ · (π₁ · a₁ · a₂)) ,, _).
+        exact q₂.
+    Qed.
+
+    Proposition assembly_functional_completeness_ex_unique_tracker
+      : ∃ (a : A),
+        ∏ (x : X₁)
+          (b : A),
+      b ⊩ x
+      → (π₁ · (a · b) ⊩ pr11 (assembly_functional_completeness_ex_unique x)
+        ∧
+        t (x ,, pr11 (assembly_functional_completeness_ex_unique x)) (π₂ · (a · b))).
+    Proof.
+      pose proof (pr1 f_p tt (hinhpr (I ,, tt))) as p.
+      revert p.
+      use factor_through_squash.
+      {
+        apply propproperty.
+      }
+      intros (a & p₁ & p₂).
+      use hinhpr.
+      refine (π₁ · a ,, _).
+      intros x b r.
+      specialize (p₁ x b r).
+      specialize (p₂ x b r).
+      revert p₁.
+      use factor_through_squash.
+      {
+        apply propproperty.
+      }
+      intros (y & s₁ & s₂).
+      cbn in s₂, p₂.
+      enough (y = pr11 (assembly_functional_completeness_ex_unique x)) as <-.
+      {
+        exact (s₁ ,, s₂).
+      }
+      pose proof (assembly_realizes_el y) as c.
+      revert c.
+      use factor_through_squash.
+      {
+        apply setproperty.
+      }
+      intros (c₁ & Hc₁).      
+      pose proof (assembly_realizes_el (pr11 (assembly_functional_completeness_ex_unique x)))
+        as c.
+      revert c.
+      use factor_through_squash.
+      {
+        apply setproperty.
+      }
+      intros (c₂ & Hc₂).
+      specialize (p₂ y c₁ Hc₁ _ c₂ Hc₂).
+      exact (pr122 p₂).
+    Qed.
+
+    Definition assembly_prop_functional_complete_morphism
+      : assembly_morphism X₁ X₂.
+    Proof.
+      use make_assembly_morphism.
+      - exact (λ x, pr11 (assembly_functional_completeness_ex_unique x)).
+      - abstract
+          (pose proof assembly_functional_completeness_ex_unique_tracker as p ;
+           revert p ;
+           use factor_through_squash ; [ apply propproperty | ] ;
+           intros (a & p) ;
+           use hinhpr ;
+           refine (B · π₁ · a ,, _) ;
+           intros b x r ;
+           rewrite combinatory_algebra_b_eq ;
+           specialize (p x b r) ;
+           exact (pr1 p)).
+    Defined.
+
+    Let f : assembly_morphism X₁ X₂
+      := assembly_prop_functional_complete_morphism.
+    
+    Let ψ : assembly_term (assembly_prop_universe_type (terminal_assembly A))
+      := (∀a X₁ (subst_assembly_term ⟨ aπ₂ , aπ₂ ·a f⟩ t)).
+
+    Definition assembly_functional_complete_realizer
+               (a : A)
+      : A
+      := Λ (Co π₂ • (Co a • V 2)).
+
+    Proposition assembly_functional_complete_realizer_eq
+                (a b₁ b₂ c : A)
+      : assembly_functional_complete_realizer a · b₁ · b₂ · c = π₂ · (a · c).
+    Proof.
+      etrans.
+      {
+        do 2 apply maponpaths_2.
+        apply lam_term_multiple.
+      }
+      rewrite lam_term_multiple.
+      rewrite lam_term_single.
+      simpl.
+      apply idpath.
+    Qed.
+      
+    Proposition assembly_prop_functional_complete_proof
+      : ⊤ ⊢ ψ.
+    Proof.
+      pose proof assembly_functional_completeness_ex_unique_tracker as p.
+      revert p.
+      use factor_through_squash.
+      {
+        apply locally_propositional_assembly_prop_disp_cat.
+      }
+      intros (a & p).
+      use make_assembly_prop_proof.
+      - exact (assembly_functional_complete_realizer a).
+      - intros ? b₁ b₂ ? ? x c r.
+        cbn -[assembly_functional_complete_realizer].
+        rewrite assembly_functional_complete_realizer_eq.
+        specialize (p x c r).
+        exact (pr2 p).
+    Qed.
+  End FunctionalCompleteness.
 End CartesianLogic.

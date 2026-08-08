@@ -217,6 +217,8 @@ Proof.
        exact (Ha₁ ,, Ha₂)).
 Defined.
 
+Notation "X₁ ×a X₂" := (prod_assembly X₁ X₂) (at level 75, right associativity) : assembly.
+
 Definition pr1_assembly_morphism
            {A : combinatory_algebra}
            (X₁ X₂ : assembly A)
@@ -231,6 +233,8 @@ Proof.
        exact (pr1 p)).
 Defined.
 
+Notation "'aπ₁'" := (pr1_assembly_morphism _ _) : assembly.
+
 Definition pr2_assembly_morphism
            {A : combinatory_algebra}
            (X₁ X₂ : assembly A)
@@ -244,6 +248,8 @@ Proof.
        intros a xy p ;
        exact (pr2 p)).
 Defined.
+
+Notation "'aπ₂'" := (pr2_assembly_morphism _ _) : assembly.
 
 Definition pair_assembly_morphism
            {A : combinatory_algebra}
@@ -273,6 +279,8 @@ Proof.
        rewrite combinatory_algebra_pr2_pair_fun ;
        exact (Ha₁ ,, Ha₂)).
 Defined.
+
+Notation "⟨ f , g ⟩" := (pair_assembly_morphism f g) : assembly.
 
 Definition binproducts_cat_of_assembly
            (A : combinatory_algebra)

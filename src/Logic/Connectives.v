@@ -232,7 +232,8 @@ Section CartesianConnectives.
 
   (** ** 1.6. Universal quantification: ∀ *)
   Definition assembly_forall_prop
-             {Γ X : assembly A}
+             {Γ : assembly A}
+             (X : assembly A)
              (t : assembly_term (assembly_prop_universe_type (prod_assembly Γ X)))
     : assembly_term (assembly_prop_universe_type Γ).
   Proof.
@@ -242,7 +243,8 @@ Section CartesianConnectives.
 
   (** ** 1.7. Existential quantification: ∃ *)
   Definition assembly_exists_prop
-             {Γ X : assembly A}
+             {Γ : assembly A}
+             (X : assembly A)
              (t : assembly_term (assembly_prop_universe_type (prod_assembly Γ X)))
     : assembly_term (assembly_prop_universe_type Γ).
   Proof.
@@ -262,6 +264,14 @@ Section CartesianConnectives.
     use make_assembly_prop.
     exact (λ xy a, pr1 xy = pr2 xy ∧ t (pr1 xy) a).
   Defined.
+
+  Definition assembly_eq_prop
+             {Γ X : assembly A}
+             (t₁ t₂ : assembly_morphism Γ X)
+    : assembly_term (assembly_prop_universe_type Γ)
+    := subst_assembly_term
+         (pair_assembly_morphism t₁ t₂)
+         (assembly_equality_prop (assembly_truth_prop X)).
 
   (** ** 1.9. Membership: ∈ *)
   Definition assembly_in_prop
@@ -393,7 +403,7 @@ Section LinearConnectives.
   Defined.
 
   (** ** 2.11. Linear existential: ⊏ *)
-  Definition assembly_lin_exists_prop
+  Definition assembly_exists_lin_prop
              {Γ X : assembly AC}
              (t : assembly_term (assembly_prop_universe_type (prod_assembly Γ X)))
     : assembly_term (assembly_prop_universe_type Γ).
@@ -409,3 +419,25 @@ Section LinearConnectives.
            (t (x ,, y) c : hProp)).
   Defined.
 End LinearConnectives.
+
+Notation "'⊤'" := (assembly_truth_prop _) : assembly.
+Notation "'⊥'" := (assembly_false_prop _) : assembly.
+Notation "t₁ ∧ t₂" := (assembly_conj_prop t₁ t₂) : assembly.
+Notation "t₁ ∨ t₂" := (assembly_conj_prop t₁ t₂) : assembly.
+Notation "t₁ ⇒ t₂" := (assembly_conj_prop t₁ t₂) : assembly.
+Notation "∀a t" := (assembly_forall_prop t) (at level 10) : assembly.
+Notation "∃a t" := (assembly_exists_prop t) (at level 10) : assembly.
+Notation "t₁ ≡ t₂ " := (assembly_eq_prop t₁ t₂) : assembly.
+Notation "'top'" := (assembly_truth_lin_prop _) : assembly.
+Notation "'bot'" := (assembly_false_lin_prop _) : assembly.
+Notation "'𝟙'" := (assembly_unit_lin_prop _) : assembly. (* \b1 *)
+Notation "t₁ ⊗ t₂" := (assembly_tensor_lin_prop t₁ t₂) : assembly. (* \otimes *)
+Notation "t₁ ⊸ t₂" := (assembly_tensor_lin_prop t₁ t₂) (at level 45, right associativity)
+    : assembly. (* \-o *)
+Notation "t₁ & t₂" := (assembly_conj_lin_prop t₁ t₂) (at level 80, right associativity)
+    : assembly.
+Notation "t₁ + t₂" := (assembly_disj_lin_prop t₁ t₂) : assembly.
+Notation "'M'" := assembly_lin_prop_to_prop : assembly.
+Notation "'L'" := assembly_prop_to_lin_prop : assembly.
+Notation "⊓a t" := (assembly_forall_lin_prop t) (at level 10) : assembly.
+Notation "⊏a t" := (assembly_exists_lin_prop t) (at level 10) : assembly.

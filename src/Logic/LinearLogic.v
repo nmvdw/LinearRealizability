@@ -669,7 +669,7 @@ Section LinearLogic.
     use universal_quantifiers_from_chosen.
     use make_universal_quantifiers_chosen.
     - cbn.
-      exact (λ Γ X t, assembly_forall_prop t).
+      exact (λ Γ X t, assembly_forall_prop _ t).
     - abstract
         (cbn ;
          intros Γ X t ;
@@ -719,7 +719,7 @@ Section LinearLogic.
     use existential_quantifiers_from_chosen.
     use make_existential_quantifiers_chosen.
     - cbn.
-      exact (λ Γ X t, assembly_lin_exists_prop t).
+      exact (λ Γ X t, assembly_exists_lin_prop t).
     - abstract
         (cbn ;
          intros Γ X t ;
@@ -783,9 +783,9 @@ Section LinearLogic.
         (assembly_prop_universe_el
            (assembly_tensor_lin_prop
               t₁
-              (assembly_lin_exists_prop t₂)))
+              (assembly_exists_lin_prop t₂)))
         (assembly_prop_universe_el
-           (assembly_lin_exists_prop
+           (assembly_exists_lin_prop
               (assembly_tensor_lin_prop
                  (subst_assembly_term
                     (pr1_assembly_morphism _ _)

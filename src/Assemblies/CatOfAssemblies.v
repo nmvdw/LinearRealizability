@@ -226,6 +226,8 @@ Definition comp_assembly_morphism
   : assembly_morphism X₁ X₃
   := comp_assembly_morphism_bi (A := A) f g.
 
+Notation "f ·a g" := (comp_assembly_morphism f g) (at level 40, left associativity) : assembly.
+
 (** * 5. The category of assemblies *)
 Section CatOfAssemblies.
   Context (A : bi_algebra).
