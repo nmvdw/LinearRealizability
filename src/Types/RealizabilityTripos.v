@@ -5,10 +5,11 @@
  Contents
  1. The displayed category of realizability predicates
  2. Cleaving for realizability predicates
- 3. The realizability hyperdoctrine (without connectives)
+ 3. The realizability preorder hyperdoctrine (without connectives)
  4. Connectives
- 5. The realizability first-order hyperdoctrine
- 6. The realizability tripos
+ 5. The realizability first-order preorder hyperdoctrine
+ 6. The realizability preorder tripos
+ 7. The realizability topos
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -28,8 +29,12 @@ Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.FiberwiseCoproduct
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.FiberwiseCartesianClosed.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentProducts.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentSums.
+Require Import UniMath.CategoryTheory.ElementaryTopos.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.Hyperdoctrine.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.Tripos.
+Require Import UniMath.CategoryTheory.Hyperdoctrines.Completion.WeakEquivs.
+Require Import UniMath.CategoryTheory.Hyperdoctrines.Completion.Construction.
+Require Import UniMath.CategoryTheory.Hyperdoctrines.TriposToTopos.
 Require Import UniMath.CategoryTheory.Limits.Initial.
 Require Import UniMath.CategoryTheory.Limits.Terminal.
 Require Import UniMath.CategoryTheory.Limits.BinProducts.
@@ -152,7 +157,7 @@ Section RealizabilityTripos.
            exact (p x b q)).
   Defined.
 
-  (** * 3. The realizability hyperdoctrine (without connectives) *)
+  (** * 3. The realizability preorder hyperdoctrine (without connectives) *)
   Definition realizability_preorder_hyperdoctrine
     : preorder_hyperdoctrine.
   Proof.
@@ -440,7 +445,7 @@ Section RealizabilityTripos.
          exact q₂).
   Defined.
   
-  (** * 5. The realizability first-order hyperdoctrine *)
+  (** * 5. The realizability first-order preorder hyperdoctrine *)
   Definition realizability_first_order_preoder_hyperdoctrine
     : first_order_preorder_hyperdoctrine.
   Proof.
@@ -455,7 +460,7 @@ Section RealizabilityTripos.
     - exact has_dependent_sums_realizability.
   Defined.
 
-  (** * 6. The realizability tripos *)
+  (** * 6. The realizability preorder tripos *)
   Definition is_preorder_tripos_realizability
     : is_preorder_tripos realizability_first_order_preoder_hyperdoctrine.
   Proof.
@@ -483,4 +488,13 @@ Section RealizabilityTripos.
     - exact realizability_first_order_preoder_hyperdoctrine.
     - exact is_preorder_tripos_realizability.
   Defined.
+
+  (** * 7. The realizability topos *)
+  Definition realizability_weak_tripos
+    : weak_tripos
+    := tripos_completion realizability_preorder_tripos.
+
+  Definition realizability_topos
+    : Topos
+    := weak_tripos_to_topos realizability_weak_tripos.
 End RealizabilityTripos.
