@@ -57,7 +57,7 @@
         iff
       K = π₁ · a   and   π₂ · a ⊫_{x} t₁
         or
-      K* = π₁ · a   and   π₂ · a ⊫_{x} t＋2
+      K* = π₁ · a   and   π₂ · a ⊫_{x} t₂
 
       a ⊫ t₁ ⇒ t₂
         iff
