@@ -4,7 +4,6 @@ COQDEP = coqdep
 
 AdjUniquenessCell.v
 PreservesMonoidalClosed.v
-BeckChevalleyChosen.v
 SetFamilies.v
 NatOrder.v
 FiberwiseMonoidal.v
@@ -33,6 +32,8 @@ Basics/CombinatoryAlgebra.v
 Basics/BIAlgebra.v
 Basics/Completeness.v
 Basics/Combinators.v
+Basics/DomainCA.v
+
 Basics/LinearCombinatoryAlgebra.v
 Basics/LinearCompleteness.v
 Basics/LinearCombinators.v

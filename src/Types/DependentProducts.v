@@ -24,7 +24,6 @@ Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentSums.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentProducts.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DualBeckChevalley.
 
-Require Import BeckChevalleyChosen.
 Require Import SetFamilies.
 
 Require Import Basics.CombinatoryAlgebra.

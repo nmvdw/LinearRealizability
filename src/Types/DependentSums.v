@@ -37,8 +37,8 @@ Require Import UniMath.CategoryTheory.DisplayedCats.Fiber.
 Require Import UniMath.CategoryTheory.DisplayedCats.Functors.
 Require Import UniMath.CategoryTheory.DisplayedCats.Codomain.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentSums.
+Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.BeckChevalleyChosenSum.
 
-Require Import BeckChevalleyChosen.
 Require Import SetFamilies.
 
 Require Import Basics.CombinatoryAlgebra.

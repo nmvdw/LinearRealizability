@@ -22,13 +22,13 @@ Require Import UniMath.CategoryTheory.DisplayedCats.Fibrations.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiber.
 Require Import UniMath.CategoryTheory.DisplayedCats.Functors.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentSums.
+Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.BeckChevalleyChosenSum.
 Require Import UniMath.CategoryTheory.Limits.Pullbacks.
 Require Import UniMath.CategoryTheory.Monoidal.Categories.
 Require Import UniMath.CategoryTheory.Monoidal.Functors.
 Require Import UniMath.CategoryTheory.Monoidal.Structure.Symmetric.
 Require Import UniMath.CategoryTheory.Monoidal.Structure.Closed.
 
-Require Import BeckChevalleyChosen.
 Require Import SetFamilies.
 Require Import PreservesMonoidalClosed.
 Require Import FiberwiseMonoidal.

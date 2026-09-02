@@ -17,6 +17,7 @@
  4.8. Generalized S-combinator
  4.9. Generalized K-combinator
  5. Lemmas about non-triviality
+ 6. Weak extensionality
 
  *)
 Require Import UniMath.MoreFoundations.All.
@@ -60,6 +61,13 @@ Proof.
   apply idpath.
 Qed.
 
+Definition is_extensional_applicative_structure
+           (A : applicative_structure)
+  : UU
+  := ∏ (a b : A),
+     (∏ (x : A), a · x = b · x)
+     → a = b.
+       
 (** * 2. Combinatory algebras *)
 Definition combinatory_algebra
   : UU
@@ -441,3 +449,25 @@ Proof.
   rewrite combinatory_algebra_i_eq.
   apply idpath.
 Qed.        
+
+(** * 6. Weak extensionality *)
+Definition is_weak_extensional_combinatory_algebra
+           (A : combinatory_algebra)
+  : UU
+  := ∏ (a b : A),
+     (∏ (x : A), a · x = b · x)
+     → S · (K · I) · a = S · (K · I) · b.
+
+Proposition extensional_to_weak_extensional_combinatory_algebra
+            {A : combinatory_algebra}
+            (H : is_extensional_applicative_structure A)
+  : is_weak_extensional_combinatory_algebra A.
+Proof.
+  intros a b p.
+  use H.
+  intros c.
+  rewrite !combinatory_algebra_s_eq.
+  rewrite !combinatory_algebra_k_eq.
+  rewrite !combinatory_algebra_i_eq.
+  apply p.
+Qed.
