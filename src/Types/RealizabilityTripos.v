@@ -55,7 +55,7 @@ Local Open Scope ca.
 Local Open Scope cat.
 
 Section RealizabilityTripos.
-  Context {A : combinatory_algebra}.
+  Context (A : combinatory_algebra).
 
   (** * 1. The displayed category of realizability predicates *)
   Definition realizability_disp_cat_ob_mor
