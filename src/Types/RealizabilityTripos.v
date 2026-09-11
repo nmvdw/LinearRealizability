@@ -39,6 +39,7 @@ Require Import UniMath.CategoryTheory.Hyperdoctrines.HyperdoctrineNat.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.Tripos.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.TriposToTopos.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.Completion.Construction.
+Require Import UniMath.CategoryTheory.Hyperdoctrines.PartialEqRels.InternalLogic.
 Require Import UniMath.CategoryTheory.Limits.Initial.
 Require Import UniMath.CategoryTheory.Limits.Terminal.
 Require Import UniMath.CategoryTheory.Limits.BinProducts.
@@ -650,4 +651,20 @@ Section RealizabilityTripos.
     := preorder_tripos_to_topos_NNO
          realizability_preorder_tripos
          realizability_preorder_tripos_nats.
+
+  Definition realizability_topos_internal_logic
+    : first_order_hyperdoctrine
+    := per_subobject_first_order_hyperdoctrine realizability_weak_tripos.
+
+  Local Open Scope hd.
+  
+  Definition realizability_topos_proof_from_tripos
+             {Γ : ty realizability_topos_internal_logic}
+             {Δ φ : form Γ}
+             (p : per_subobject_to_form Δ ⊢ per_subobject_to_form φ)
+    : Δ ⊢ φ.
+  Proof.
+    use per_subobject_mor_law_over_id.
+    exact p.
+  Qed.
 End RealizabilityTripos.
