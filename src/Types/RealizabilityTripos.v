@@ -566,7 +566,7 @@ Section RealizabilityTripos.
     : Topos
     := weak_tripos_to_topos realizability_weak_tripos.
 
-  Definition realizability_tripos_NNO
+  Definition realizability_topos_NNO
     : NNO (Topos_Terminal realizability_topos)
     := preorder_tripos_to_topos_NNO
          realizability_preorder_tripos
