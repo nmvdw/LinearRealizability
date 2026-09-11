@@ -33,6 +33,8 @@ Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentProducts.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentSums.
 Require Import UniMath.CategoryTheory.ElementaryTopos.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.Hyperdoctrine.
+Require Import UniMath.CategoryTheory.Hyperdoctrines.FirstOrderHyperdoctrine.
+Require Import UniMath.CategoryTheory.Hyperdoctrines.FirstOrderHyperdoctrineChosen.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.HyperdoctrineNat.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.Tripos.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.TriposToTopos.
@@ -43,7 +45,6 @@ Require Import UniMath.CategoryTheory.Limits.BinProducts.
 Require Import UniMath.CategoryTheory.Limits.BinCoproducts.
 Require Import UniMath.CategoryTheory.Limits.Pullbacks.
 Require Import UniMath.CategoryTheory.Limits.Preservation.
-Require Import UniMath.CategoryTheory.Hyperdoctrines.FirstOrderHyperdoctrine.
 
 Require Import Basics.CombinatoryAlgebra.
 Require Import Basics.Completeness.
@@ -94,7 +95,7 @@ Section RealizabilityTripos.
   Qed.
   
   Definition realizability_disp_cat_data
-      : disp_cat_data SET.
+    : disp_cat_data SET.
   Proof.
     simple refine (_ ,, _).
     - exact realizability_disp_cat_ob_mor.
@@ -356,6 +357,41 @@ Section RealizabilityTripos.
          exact q).
   Defined.
 
+  Definition universal_quantifiers_realizability
+    : universal_quantifiers realizability_preorder_hyperdoctrine.
+  Proof.
+    use universal_quantifiers_from_chosen.
+    use make_universal_quantifiers_chosen.
+    - exact (λ Γ (X : hSet) Φ γ a, ∀ (x : X), Φ (γ ,, x) a).
+    - abstract
+        (intros Γ X Φ ;
+         use hinhpr ;
+         refine (I ,, _) ;
+         cbn ;
+         intros (γ & x) a p ;
+         rewrite combinatory_algebra_i_eq ;
+         apply p).
+    - abstract
+        (intros Γ X Φ₁ Φ₂ ;
+         use factor_through_squash_hProp ;
+         intros (a & p) ;
+         use hinhpr ;
+         cbn in * ;
+         refine (a ,, _) ;
+         intros γ b q x ;
+         apply p ;
+         cbn ;
+         exact q).
+    - abstract
+        (intros Γ₁ Γ₂ X s Ψ ;
+         use hinhpr ;
+         cbn ; unfold prodtofuntoprod ; cbn ;
+         refine (I ,, _) ;
+         intros γ a p x ;
+         rewrite combinatory_algebra_i_eq ;
+         apply p).
+  Defined.
+
   Definition has_dependent_products_realizability
     : has_dependent_products cleaving_realizability_disp_cat.
   Proof.
@@ -396,6 +432,45 @@ Section RealizabilityTripos.
          specialize (q (el_pullback_set Hp y x r) (el_pullback_set_pr2 Hp y x r)) ;
          rewrite el_pullback_set_pr1 in q ;
          exact q).
+  Defined.
+
+  Definition existential_quantifiers_realizability
+    : existential_quantifiers realizability_preorder_hyperdoctrine.
+  Proof.
+    use existential_quantifiers_from_chosen.
+    use make_existential_quantifiers_chosen.
+    - exact (λ Γ (X : hSet) Φ γ a, ∃ (x : X), Φ (γ ,, x) a).
+    - abstract
+        (intros Γ X Ψ ;
+         use hinhpr ;
+         refine (I ,, _) ;
+         intros (γ & x) a p ;
+         use hinhpr ;
+         cbn ;
+         rewrite combinatory_algebra_i_eq ;
+         exact (x ,, p)).
+    - abstract
+        (intros Γ X Φ₁ Φ₂ ;
+         use factor_through_squash_hProp ;
+         intros (a & p) ;
+         use hinhpr ;
+         refine (a ,, _) ;
+         intros γ b ;
+         use factor_through_squash_hProp ;
+         intros (x & q) ;
+         cbn in * ;
+         exact (p (γ ,, x) _ q)).
+    - abstract
+        (intros Γ₁ Γ₂ X s Φ ;
+         use hinhpr ;
+         refine (I ,, _) ;
+         intros γ a ;
+         use factor_through_squash_hProp ;
+         intros (x & p) ;
+         use hinhpr ;
+         cbn ; unfold prodtofuntoprod ; cbn ;
+         rewrite combinatory_algebra_i_eq ;
+         exact (x ,, p)).
   Defined.
 
   Definition has_dependent_sums_realizability
@@ -446,20 +521,50 @@ Section RealizabilityTripos.
          rewrite el_pullback_set_pr1 ;
          exact q₂).
   Defined.
+
+  Proposition equality_formulas_realizability
+    : equality_formulas realizability_preorder_hyperdoctrine.
+  Proof.
+    use make_equality_formulas.
+    - exact (λ X Φ x a, pr1 x = pr2 x ∧ Φ (pr1 x) a)%logic.
+    - abstract
+        (intros X Φ ;
+         use hinhpr ;
+         cbn ;
+         refine (I ,, _) ;
+         intros x a p ;
+         refine (idpath _ ,, _) ;
+         rewrite combinatory_algebra_i_eq ;
+         exact p).
+    - abstract
+        (intros X Φ₁ Φ₂ ;
+         use factor_through_squash_hProp ;
+         intros (a & p) ;
+         use hinhpr ;
+         cbn in * ;
+         unfold prodtofuntoprod in * ;
+         refine (a ,, _) ;
+         intros (x₁ & x₂) b (q & r) ;
+         cbn in * ;
+         induction q ;
+         use p ;
+         exact r).
+  Defined.
   
   (** * 5. The realizability first-order preorder hyperdoctrine *)
   Definition realizability_first_order_preoder_hyperdoctrine
     : first_order_preorder_hyperdoctrine.
   Proof.
-    use make_first_order_preorder_hyperdoctrine_all.
+    use make_first_order_preorder_hyperdoctrine.
     - exact realizability_preorder_hyperdoctrine.
     - exact fiberwise_terminal_realizability.
     - exact fiberwise_initial_realizability.
     - exact fiberwise_binproducts_realizability.
     - exact fiberwise_bincoproducts_realizability.
     - exact fiberwise_exponentials_realizability.
-    - exact has_dependent_products_realizability.
-    - exact has_dependent_sums_realizability.
+    - exact universal_quantifiers_realizability.
+    - exact existential_quantifiers_realizability.
+    - exact equality_formulas_realizability.
   Defined.
 
   (** * 6. The realizability preorder tripos *)
@@ -509,43 +614,17 @@ Section RealizabilityTripos.
     split.
     - use hinhpr.
       refine (I ,, _).
-      intros [] a [] [ [] n ] p b.
-      use factor_through_squash.
-      {
-        apply isapropempty.
-      }
+      intros [] a [] n b (p & []).
       cbn in *.
-      unfold prodtofuntoprod ; cbn.
-      intros [ m [ q r ]].
-      pose (q₁ := maponpaths dirprod_pr1 q).
-      pose (q₂ := maponpaths dirprod_pr2 q).
-      cbn in q₁, q₂.
       refine (negpaths0sx n _).
-      exact (!q₂ @ q₁).
+      exact (!p).
     - use hinhpr.
       refine (I ,, _).
-      intros [] a [] [ [] n ] p [ [ [] m ] k ] q b.
-      use factor_through_squash_hProp.
-      intros [ k' [ r [] ] ].
-      use hinhpr.
-      cbn in *.
-      unfold prodtofuntoprod in * ; cbn in *.
-      assert (m = n) as s.
-      {
-        exact (maponpaths dirprod_pr2 q).
-      }
-      induction s.
-      clear p q.
-      assert (k = m) as s.
-      {
-        use invmaponpathsS.
-        refine (maponpaths dirprod_pr1 (!r) @ _).
-        exact (maponpaths dirprod_pr2 r).
-      }
-      induction s.
-      refine (k ,, _ ,, _).
-      + apply idpath.
-      + exact tt.
+      cbn.
+      intros [] a [] n m b [ p [] ].
+      refine (_ ,, tt).
+      use invmaponpathsS.
+      exact p.
   Qed.
 
   Definition realizability_preorder_tripos_nats
