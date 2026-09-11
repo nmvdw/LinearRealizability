@@ -33,6 +33,7 @@ Basics/BIAlgebra.v
 Basics/Completeness.v
 Basics/Combinators.v
 Basics/DomainCA.v
+Basics/CombinatoryLogic.v
 
 Basics/LinearCombinatoryAlgebra.v
 Basics/LinearCompleteness.v

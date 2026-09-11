@@ -426,9 +426,6 @@ Section AssemblyCompCat.
          exact tt).
   Defined.
 
-  Definition TODO { Z : UU } : Z.
-  Admitted.
-
   Definition assembly_unit_subst
              (Γ Δ : assembly A)
              (s : assembly_morphism Γ Δ)
@@ -462,13 +459,11 @@ Section AssemblyCompCat.
   Definition assembly_comp_cat_unit
     : comp_cat_unit assembly_comp_cat.
   Proof.
-    simple refine (_ ,, _ ,, _ ,, _ ,, _ ,, _ ,, _ ,, _).
+    simple refine (_ ,, _ ,, _ ,, _).
     - exact terminal_dep_assembly.
     - intros Γ.
       use assembly_term_to_section.
       exact (assembly_unit_tt Γ).
-    - apply TODO.
-    - apply TODO.
     - abstract
         (intros Γ t ;
          refine (!(homotweqinvweq (assembly_term_weq_section _) t) @ _) ;
@@ -478,8 +473,6 @@ Section AssemblyCompCat.
          intro x ;
          apply isapropunit).
     - exact assembly_unit_subst.
-    - apply TODO.
-    - apply TODO.
   Defined.
 
   (** * 5. ∏-types of assemblies *)
