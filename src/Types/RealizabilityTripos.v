@@ -9,12 +9,14 @@
  4. Connectives
  5. The realizability first-order preorder hyperdoctrine
  6. The realizability preorder tripos
- 7. The realizability topos
+ 7. The natural numbers in the realizability preorder tripos
+ 8. The realizability topos
 
  *)
 Require Import UniMath.MoreFoundations.All.
 Require Import UniMath.CategoryTheory.Core.Prelude.
 Require Import UniMath.CategoryTheory.Categories.HSET.All.
+Require Import UniMath.CategoryTheory.Arithmetic.NNO.
 Require Import UniMath.CategoryTheory.DisplayedCats.Core.
 Require Import UniMath.CategoryTheory.DisplayedCats.Isos.
 Require Import UniMath.CategoryTheory.DisplayedCats.Univalence.
@@ -31,10 +33,10 @@ Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentProducts.
 Require Import UniMath.CategoryTheory.DisplayedCats.Fiberwise.DependentSums.
 Require Import UniMath.CategoryTheory.ElementaryTopos.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.Hyperdoctrine.
+Require Import UniMath.CategoryTheory.Hyperdoctrines.HyperdoctrineNat.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.Tripos.
-Require Import UniMath.CategoryTheory.Hyperdoctrines.Completion.WeakEquivs.
-Require Import UniMath.CategoryTheory.Hyperdoctrines.Completion.Construction.
 Require Import UniMath.CategoryTheory.Hyperdoctrines.TriposToTopos.
+Require Import UniMath.CategoryTheory.Hyperdoctrines.Completion.Construction.
 Require Import UniMath.CategoryTheory.Limits.Initial.
 Require Import UniMath.CategoryTheory.Limits.Terminal.
 Require Import UniMath.CategoryTheory.Limits.BinProducts.
@@ -489,7 +491,73 @@ Section RealizabilityTripos.
     - exact is_preorder_tripos_realizability.
   Defined.
 
-  (** * 7. The realizability topos *)
+  (** * 7. The natural numbers in the realizability preorder tripos *)
+  Definition realizability_preorder_tripos_nats_data
+    : first_order_preorder_hyperdoctrine_nats_data
+        realizability_first_order_preoder_hyperdoctrine.
+  Proof.
+    use make_first_order_preorder_hyperdoctrine_nats_data.
+    - exact natset.
+    - exact (λ _, 0).
+    - exact (λ n, 1 + n).
+  Defined.
+
+  Proposition realizability_preorder_tripos_nats_axioms
+    : first_order_preorder_hyperdoctrine_nats_axioms
+        realizability_preorder_tripos_nats_data.
+  Proof.
+    split.
+    - use hinhpr.
+      refine (I ,, _).
+      intros [] a [] [ [] n ] p b.
+      use factor_through_squash.
+      {
+        apply isapropempty.
+      }
+      cbn in *.
+      unfold prodtofuntoprod ; cbn.
+      intros [ m [ q r ]].
+      pose (q₁ := maponpaths dirprod_pr1 q).
+      pose (q₂ := maponpaths dirprod_pr2 q).
+      cbn in q₁, q₂.
+      refine (negpaths0sx n _).
+      exact (!q₂ @ q₁).
+    - use hinhpr.
+      refine (I ,, _).
+      intros [] a [] [ [] n ] p [ [ [] m ] k ] q b.
+      use factor_through_squash_hProp.
+      intros [ k' [ r [] ] ].
+      use hinhpr.
+      cbn in *.
+      unfold prodtofuntoprod in * ; cbn in *.
+      assert (m = n) as s.
+      {
+        exact (maponpaths dirprod_pr2 q).
+      }
+      induction s.
+      clear p q.
+      assert (k = m) as s.
+      {
+        use invmaponpathsS.
+        refine (maponpaths dirprod_pr1 (!r) @ _).
+        exact (maponpaths dirprod_pr2 r).
+      }
+      induction s.
+      refine (k ,, _ ,, _).
+      + apply idpath.
+      + exact tt.
+  Qed.
+
+  Definition realizability_preorder_tripos_nats
+    : first_order_preorder_hyperdoctrine_nats
+        realizability_first_order_preoder_hyperdoctrine.
+  Proof.
+    use make_first_order_preorder_hyperdoctrine_nats.
+    - exact realizability_preorder_tripos_nats_data.
+    - exact realizability_preorder_tripos_nats_axioms.
+  Defined.
+  
+  (** * 8. The realizability topos *)
   Definition realizability_weak_tripos
     : weak_tripos
     := tripos_completion realizability_preorder_tripos.
@@ -497,4 +565,10 @@ Section RealizabilityTripos.
   Definition realizability_topos
     : Topos
     := weak_tripos_to_topos realizability_weak_tripos.
+
+  Definition realizability_tripos_NNO
+    : NNO (Topos_Terminal realizability_topos)
+    := preorder_tripos_to_topos_NNO
+         realizability_preorder_tripos
+         realizability_preorder_tripos_nats.
 End RealizabilityTripos.
