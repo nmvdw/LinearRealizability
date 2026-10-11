@@ -38,6 +38,7 @@ Basics/CombinatoryLogic.v
 Basics/LinearCombinatoryAlgebra.v
 Basics/LinearCompleteness.v
 Basics/LinearCombinators.v
+Basics/LinearCombinatoryLogic.v
 
 Assemblies/CatOfAssemblies.v
 Assemblies/AssembliesStructure.v
